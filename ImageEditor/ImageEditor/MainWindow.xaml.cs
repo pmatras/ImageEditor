@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,22 @@ namespace ImageEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
+        public MainWindow() {
+
             InitializeComponent();
+        }
+
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e) {
+
+            OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.ShowDialog();
+
+        }
+
+        private void AuthorsInfo_Click(object sender, RoutedEventArgs e) {
+
+            MessageBox.Show("Piotr Matras");
+
         }
     }
 }
