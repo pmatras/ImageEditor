@@ -16,27 +16,32 @@ using System.Windows.Shapes;
 
 namespace ImageEditor
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow() {
 
             InitializeComponent();
         }
-
-        private void LoadImageButton_Click(object sender, RoutedEventArgs e) {
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e) { //dodać exceptions
 
             OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;...";
             openDialog.ShowDialog();
+
+            string fileName = openDialog.FileName;
+
+            UsersImage.setImagePath(fileName);
+
+            selectingEffect selectingEffectWindow = new selectingEffect();
+            selectingEffectWindow.Show();
+
+            this.Close();
 
         }
 
         private void AuthorsInfo_Click(object sender, RoutedEventArgs e) {
 
             MessageBox.Show("Piotr Matras");
-
         }
     }
 }
