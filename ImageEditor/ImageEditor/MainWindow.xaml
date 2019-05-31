@@ -5,11 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="Image Editor" Height="450" Width="800" Icon="./resources/image.ico" Background="DarkGray">
+        Title="Image Editor" Height="450" Width="800" Icon="./resources/image.ico" Background="DarkGray" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="LoadImageButton" Content="Load Image" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" FontSize="20" FontFamily="Consolas" Click="LoadImageButton_Click"/>
-        <TextBlock HorizontalAlignment="Center" TextWrapping="NoWrap" FontSize ="28" Text="Welcome in Image Editor, please select a file to work with." VerticalAlignment="Top"/>
-        <Button x:Name="AuthorsInfo" Content="Display info about author" HorizontalAlignment="Left" Margin="580,375,0,0" VerticalAlignment="Top" Width="200" Click="AuthorsInfo_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="265*"/>
+            <ColumnDefinition Width="527*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="LoadImageButton" Content="Load Image" HorizontalAlignment="Center" VerticalAlignment="Center" Width="149" FontSize="20" FontFamily="Consolas" Click="LoadImageButton_Click" Grid.Column="1" Margin="56,196,322,189" Height="34"/>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="NoWrap" FontSize ="28" Text="Welcome in Image Editor, please select a file to work with." VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="30,0,32,0" Height="50" Width="730"/>
+        <Button x:Name="AuthorsInfo" Content="Display info about author" HorizontalAlignment="Left" Margin="315,375,0,0" VerticalAlignment="Top" Width="200" Click="AuthorsInfo_Click" Grid.Column="1"/>
+        <Button Content="Program info" HorizontalAlignment="Left" Margin="10,380,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>
