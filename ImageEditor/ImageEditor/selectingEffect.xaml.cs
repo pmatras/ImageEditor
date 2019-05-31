@@ -24,33 +24,15 @@ namespace ImageEditor
     {
         public selectingEffect()
         {
-            InitializeComponent();
+            InitializeComponent();     
+                  
+            BitmapImage sourceImage = new BitmapImage(); //if users didn't choose an image code to do nothing
+            sourceImage.BeginInit();
+            sourceImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
+            sourceImage.EndInit();
 
-            //Image image = new Image();
-
-            // if (image.Exists(AppDomain.CurrentDomain.BaseDirectory + "images/lock.png"))
-            // Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + "images/lock.png", UriKind.RelativeOrAbsolute);
-            //MyImage.Source = BitmapFrame.Create(uri);
-
-
-
-            BitmapImage source = new BitmapImage(); //spr majpierw czy plik isdtniehje
-            source.BeginInit();
-            source.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
-            source.EndInit();
-
-            OriginalImage.Source = source;
-
-            //image.Source = source;
-
-           
-
-            
-
-
-                 
-
-
+            OriginalImage.Source = sourceImage;
+                       
         }
 
         private void blackWhite_click(object sender, RoutedEventArgs e)
