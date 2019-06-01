@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ImageEditor;
 using System.Drawing;
-using ImageEditor;
 
 namespace ImageEditor
 {
@@ -35,25 +34,56 @@ namespace ImageEditor
 
         private void blackWhite_click(object sender, RoutedEventArgs e)
         {
-            UsersImage image = new UsersImage();
-            Bitmap usersImage = image.loadImage();
-            Bitmap imageToEdit = UsersImage.makeCopyToEdit(usersImage);
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            BlackWhiteEffect imageEditor = new BlackWhiteEffect();
+            IEditImage imageEditor = new BlackWhiteEffect();
             imageEditor.editImage(imageToEdit);
 
-            
+            EffectSelector.showEditionResults();
+            this.Close();
 
         }
 
         private void sepia_Click(object sender, RoutedEventArgs e)
         {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new SepiaEffect();
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+            this.Close();
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Negative_Click(object sender, RoutedEventArgs e)
         {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
+            IEditImage imageEditor = new NegativeEffect();
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+            this.Close();
+            
+        }
+    }
+
+    class EffectSelector
+    {
+        public static Bitmap prepareImageToEdit()
+        {
+            UsersImage image = new UsersImage(); 
+            Bitmap usersImage = image.loadImage();
+            Bitmap imageToEdit = UsersImage.makeCopyToEdit(usersImage);
+
+            return imageToEdit;
+        }
+
+        public static void showEditionResults()
+        {
+            EditionEffect editionEffectWindow = new EditionEffect(); 
+            editionEffectWindow.Show();
         }
     }
 }
