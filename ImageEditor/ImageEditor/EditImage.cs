@@ -37,7 +37,72 @@ namespace ImageEditor
                     
                 }
 
-            UsersImage.saveEditedImage("editedBlackWhite", imageToEdit);
+            UsersImage.saveEditedImage(imageToEdit);
+        }
+    }
+
+    class NegativeEffect : IEditImage
+    {
+        private const int maxRGBValue = 255;
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                    var NegativePixelR = maxRGBValue - pixel.R;
+                    var NegativePixelG = maxRGBValue - pixel.G;
+                    var NegativePixelB = maxRGBValue - pixel.B;
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
+        }
+    }
+
+    class SepiaEffect : IEditImage
+    {
+        private const int maxRGBValue = 255;
+        private const int fillFactor = 20;
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+            for (int i = 0; i < imageToEdit.Width; ++i)
+                for (int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                    var NegativePixelR = maxRGBValue - pixel.R;
+                    var NegativePixelG = maxRGBValue - pixel.G;
+                    var NegativePixelB = maxRGBValue - pixel.B;
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
+                }
+
+            for (int i = 0; i < imageToEdit.Width; ++i)
+                for (int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                    var SepiaPixelR = pixel.R + 2 * fillFactor; //można przygotować gotową tablicę z wartościami pixeli
+                    if (SepiaPixelR > 255)
+                        SepiaPixelR = 255;
+
+                    var SepiaPixelG = pixel.G + fillFactor;
+                    if (SepiaPixelG > 255)
+                        SepiaPixelG = 255;
+
+                    var SepiaPixelB = pixel.B;
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)SepiaPixelR, (int)SepiaPixelG, (int)SepiaPixelB));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
         }
     }
 }
