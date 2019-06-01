@@ -12,14 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ImageEditor;
+using System.Drawing;
+using ImageEditor;
 
 namespace ImageEditor
 {
-    /// <summary>
-    /// Logika interakcji dla klasy selectingEffect.xaml
-    /// </summary>
-    /// 
-    
+  
     public partial class selectingEffect : Window
     {
         public selectingEffect()
@@ -31,12 +29,20 @@ namespace ImageEditor
             sourceImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
             sourceImage.EndInit();
 
-            OriginalImage.Source = sourceImage;
+            OriginalImage.Source = sourceImage; //dodać exceptions
                        
         }
 
         private void blackWhite_click(object sender, RoutedEventArgs e)
         {
+            UsersImage image = new UsersImage();
+            Bitmap usersImage = image.loadImage();
+            Bitmap imageToEdit = UsersImage.makeCopyToEdit(usersImage);
+
+            BlackWhiteEffect imageEditor = new BlackWhiteEffect();
+            imageEditor.editImage(imageToEdit);
+
+            
 
         }
 
