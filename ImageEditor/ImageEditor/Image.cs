@@ -23,6 +23,15 @@ namespace ImageEditor
         {
             imagePath = ImagePath;
         }
+        public static string getEditedImagePath()
+        {
+            return editedImagePath;
+        }
+
+        public static void setEditedImagePath(string ImagePath)
+        {
+            editedImagePath = ImagePath;
+        }
 
         Bitmap image;
         public Bitmap loadImage() 
@@ -48,12 +57,21 @@ namespace ImageEditor
             return clonedImage;
         }
 
-        public static void saveEditedImage(string fileName, Bitmap toSave)
+        public static void saveEditedImage(Bitmap toSave)
         {
-            SaveFileDialog dialog = new SaveFileDialog(); //exceptions
-            dialog.ShowDialog(); //założyć filtr na obrazu 
-            //messageBox gdzie został zapisany zedytowany obraz
-            toSave.Save(dialog.FileName/*, ImageFormat.Jpeg*/);
+            SaveFileDialog saveFileDialog = new SaveFileDialog(); //exceptions
+            saveFileDialog.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp";
+            saveFileDialog.Title = "Save Edited Image";
+            saveFileDialog.ShowDialog();  
+            
+            if(saveFileDialog.FileName != "")
+            {
+                editedImagePath = saveFileDialog.FileName;
+                toSave.Save(editedImagePath);
+
+                MessageBox.Show("File saved succesfully in " + editedImagePath);
+            }
+            
         }
 
     }
