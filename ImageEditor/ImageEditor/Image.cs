@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows;
+using Microsoft.Win32;
 
 namespace ImageEditor
 {
     class UsersImage
     {
-        // private static string imagePath { public get; public set; }
         private static string imagePath;
-        public int x { get; private set; }
-
+        private static string editedImagePath; //kolekcje do przertrzymywania w mapie wartosci pixeli dla danego efektu; edytowane bitmapy zapisywac w folderze edited
+        
         public static string getImagePath()
         {
             return imagePath;
@@ -22,19 +24,34 @@ namespace ImageEditor
             imagePath = ImagePath;
         }
 
-        public void loadImage()
+        Bitmap image;
+        public Bitmap loadImage() 
         {
-           
+            
+
+            try
+            {
+                image = new Bitmap(imagePath, true);
+                
+            } catch(ArgumentException)
+            {
+                MessageBox.Show("Error occured!");
+            }
+
+            return image;
         }
 
-        public void makeCopyToEdit()
+        public static Bitmap makeCopyToEdit(Bitmap imageToCopy)
         {
+            Bitmap clonedImage = new Bitmap(imageToCopy);
 
+            return clonedImage;
         }
 
-        public void saveEditedImage()
+        public void saveEditedImage(string fileName, Bitmap toSave)
         {
-
+            SaveFileDialog dialog = new SaveFileDialog();
+            toSave.Save(dialog.FileName/*, ImageFormat.Jpeg*/);
         }
 
     }
