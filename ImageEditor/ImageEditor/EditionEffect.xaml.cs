@@ -14,14 +14,24 @@ using System.Windows.Shapes;
 
 namespace ImageEditor
 {
-    /// <summary>
-    /// Logika interakcji dla klasy EditionEffect.xaml
-    /// </summary>
     public partial class EditionEffect : Window
     {
         public EditionEffect()
         {
             InitializeComponent();
+
+            BitmapImage originalImage = new BitmapImage(); //if users didn't choose an image code to do nothing
+            originalImage.BeginInit();
+            originalImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
+            originalImage.EndInit();
+
+            BitmapImage editedImage = new BitmapImage(); //if users didn't choose an image code to do nothing
+            editedImage.BeginInit();
+            editedImage.UriSource = new Uri(UsersImage.getEditedImagePath(), UriKind.Absolute);
+            editedImage.EndInit();
+
+            OriginalImage.Source = originalImage; //dodać exceptions
+            EditedImage.Source = editedImage;
         }
     }
 }
