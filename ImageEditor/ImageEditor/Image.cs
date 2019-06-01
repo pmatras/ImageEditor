@@ -48,9 +48,11 @@ namespace ImageEditor
             return clonedImage;
         }
 
-        public void saveEditedImage(string fileName, Bitmap toSave)
+        public static void saveEditedImage(string fileName, Bitmap toSave)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
+            SaveFileDialog dialog = new SaveFileDialog(); //exceptions
+            dialog.ShowDialog(); //założyć filtr na obrazu 
+            //messageBox gdzie został zapisany zedytowany obraz
             toSave.Save(dialog.FileName/*, ImageFormat.Jpeg*/);
         }
 
