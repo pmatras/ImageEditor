@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="EditionEffect" Height="450" Width="800">
+        Title="EditionEffect" Height="450" Width="939" 
+        WindowStartupLocation="CenterScreen">
     <Grid>
-        <Image HorizontalAlignment="Left" Height="160" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
-        <Image HorizontalAlignment="Left" Height="310" Margin="330,10,0,0" VerticalAlignment="Top" Width="430" />
-        
+        <Image Name="OriginalImage" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="360"/>
+        <Image Name="EditedImage" HorizontalAlignment="Left" Height="355" Margin="390,25,0,0" VerticalAlignment="Top" Width="515" />
+
 
     </Grid>
 </Window>
