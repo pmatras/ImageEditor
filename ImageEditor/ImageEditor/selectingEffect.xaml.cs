@@ -100,7 +100,7 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ColorEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1); //na enumach
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1); //na enumach
 
             if (input == "red") //switch + enum
                 ColorEffect.setColorOption(0);
@@ -108,6 +108,21 @@ namespace ImageEditor
                 ColorEffect.setColorOption(1);
             if (input == "blue")
                 ColorEffect.setColorOption(2);
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
+
+        private void InvertColors_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new ColorEffect();
 
             imageEditor.editImage(imageToEdit);
 
