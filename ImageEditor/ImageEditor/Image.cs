@@ -60,7 +60,7 @@ namespace ImageEditor
         public static void saveEditedImage(Bitmap toSave)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog(); //exceptions
-            saveFileDialog.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp";
+            saveFileDialog.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp"; //"Image Files|*.jpg;*.jpeg;*.png;..."
             saveFileDialog.Title = "Save Edited Image";
             saveFileDialog.ShowDialog();  
             
