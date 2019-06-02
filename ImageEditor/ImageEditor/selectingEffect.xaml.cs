@@ -67,6 +67,56 @@ namespace ImageEditor
             this.Close();
             
         }
+
+        private void Brightness_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new BrightnessEffect();
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1);
+            int brightnessValue = Int32.Parse(input);
+
+            if (brightnessValue < -255)
+                brightnessValue = -255;
+
+            if (brightnessValue > 255)
+                brightnessValue = 255;
+
+            BrightnessEffect.setBrightnessValue(brightnessValue);
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+                        
+
+            this.Close();
+
+        }
+
+        private void Color_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new ColorEffect();
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1); //na enumach
+
+            if (input == "red") //switch + enum
+                ColorEffect.setColorOption(0);
+            if (input == "green")
+                ColorEffect.setColorOption(1);
+            if (input == "blue")
+                ColorEffect.setColorOption(2);
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
     }
 
     class EffectSelector
