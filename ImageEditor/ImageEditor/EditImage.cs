@@ -292,21 +292,39 @@ namespace ImageEditor
 
         public void editImage(Bitmap imageToEdit)
         {
+            makeLUTArray();
+
             Color pixel;
 
             for(int i = 0; i < imageToEdit.Width; ++i)
                 for(int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)LUT[pixel.R], (int)LUT[pixel.G], (int)LUT[pixel.B]));
                 }
+
+            UsersImage.saveEditedImage(imageToEdit);
         }
 
         private void makeLUTArray()
         {
+            double contrastCorrectionFactor = (259 * (contrastValue + 255)) / (255 * (259 - contrastValue));
+
             this.LUT = new List<double>();
+
+            double newContrastedPixel = 0;
 
             for(int i = 0; i < 256; ++i)
             {
+                newContrastedPixel = contrastCorrectionFactor * ((i - 128) + 128);
+
+                if (newContrastedPixel > 255) //lambda??
+                    newContrastedPixel = 255;
+                else if (newContrastedPixel < 0)
+                    newContrastedPixel = 0;
+
+                LUT.Add(newContrastedPixel);
                 
             }
         }
