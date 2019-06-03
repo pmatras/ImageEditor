@@ -122,7 +122,7 @@ namespace ImageEditor
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new ColorEffect();
+            IEditImage imageEditor = new InvertColorsEffect();
 
             imageEditor.editImage(imageToEdit);
 
