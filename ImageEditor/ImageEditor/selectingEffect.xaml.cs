@@ -178,8 +178,13 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ChangeContrastEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -100 and 100.", "Enter value of contrast adjustment", "50", -1, -1);
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -255 and 255.", "Enter value of contrast adjustment", "50", -1, -1);
             Int32.TryParse(input, out int contrastValue);
+
+            if (contrastValue > 255)
+                contrastValue = 255;
+            else if (contrastValue < -255)
+                contrastValue = -255;
 
             ChangeContrastEffect.setContrastValue(contrastValue);
 
