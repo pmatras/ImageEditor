@@ -280,4 +280,35 @@ namespace ImageEditor
             return gammaArray;
         }
     }
+
+    class ChangeContrastEffect : IEditImage
+    {
+        private List<double> LUT;
+        private static int contrastValue;
+        public static void setContrastValue(int contrast)
+        {
+            contrastValue = contrast;
+        }
+
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+                }
+        }
+
+        private void makeLUTArray()
+        {
+            this.LUT = new List<double>();
+
+            for(int i = 0; i < 256; ++i)
+            {
+                
+            }
+        }
+    }
 }

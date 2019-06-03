@@ -21,6 +21,8 @@
         <Button Content="Invert Colors" HorizontalAlignment="Left" Height="50" Margin="60,0,0,0" VerticalAlignment="Top" Width="157" Click="InvertColors_Click" Grid.Column="1"/>
         <Button Content="Gauss Bluring" HorizontalAlignment="Left" Height="50" Margin="60,65,0,0" VerticalAlignment="Top" Width="157" Click="GaussBlur_Click" Grid.Column="1"/>
         <Button Content="Gamma Filtering" Grid.Column="1" HorizontalAlignment="Left" Height="50" Margin="60,135,0,0" VerticalAlignment="Top" Width="157" Click="GammaFiltering_Click"/>
+        <Button Content="Crop Image" Grid.Column="1" HorizontalAlignment="Left" Height="50" Margin="60,205,0,0" VerticalAlignment="Top" Width="157" Click="CropImage_Click"/>
+        <Button Content="Contrast" Grid.Column="1" HorizontalAlignment="Left" Height="50" Margin="60,280,0,0" VerticalAlignment="Top" Width="157" Click="Contrast_Click"/>
 
     </Grid>
 </Window>

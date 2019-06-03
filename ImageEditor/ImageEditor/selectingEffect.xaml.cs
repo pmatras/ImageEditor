@@ -166,6 +166,31 @@ namespace ImageEditor
             this.Close();
 
         }
+
+        private void CropImage_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Contrast_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new ChangeContrastEffect();
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust.", "Enter value of contrast adjustment", "100", -1, -1);
+            Int32.TryParse(input, out int contrastValue);
+
+            ChangeContrastEffect.setContrastValue(contrastValue);
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
     }
 
     class EffectSelector
