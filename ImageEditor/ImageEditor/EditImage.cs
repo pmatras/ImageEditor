@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Collections;
 
 namespace ImageEditor
 {
@@ -223,6 +224,60 @@ namespace ImageEditor
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
+        }
+    }
+
+    class GaussBlurEffect : IEditImage
+    {
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                }
+        }
+    }
+
+    class GammaFilteringEffect : IEditImage
+    {
+        private static int gammaValue; //oddzielna wartość dla każdego kanału RGB??
+        public static void setGammaValue(int value)
+        {
+            gammaValue = value;
+        }
+        public void editImage(Bitmap imageToEdit)
+        {
+            List<int> gammaArray = createGammaArray(); //oddzielne tablice dla każdego kanału??
+
+            Color pixel;
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+                    //int pixelR = gammaArray[(int)2];
+
+                   imageToEdit.SetPixel(i, j, Color.FromArgb(gammaArray[(int)pixel.R], gammaArray[(int)pixel.G], gammaArray[(int)pixel.B]));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
+
+        }
+
+        private List<int> createGammaArray()
+        {
+            List<int> gammaArray = new List<int>();
+
+            for(int i = 0; i < 256; ++i)
+            {
+                gammaArray.Add((int)Math.Min(255, (int)255.0 * Math.Pow(i / 255.0, 1.0 / gammaValue) + 0.5)); //rzutowanie??
+            }
+
+            return gammaArray;
         }
     }
 }

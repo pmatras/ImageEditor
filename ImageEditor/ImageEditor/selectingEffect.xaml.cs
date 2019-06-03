@@ -123,6 +123,40 @@ namespace ImageEditor
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
             IEditImage imageEditor = new InvertColorsEffect();
+                        
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
+
+        private void GaussBlur_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new GaussBlurEffect();
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
+
+        private void GammaFiltering_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+            
+            IEditImage imageEditor = new GammaFilteringEffect();
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio.", "Enter value of gamma", "1", -1, -1);
+            Int32.TryParse(input, out int gammaValue);
+            GammaFilteringEffect.setGammaValue(gammaValue);
 
             imageEditor.editImage(imageToEdit);
 
