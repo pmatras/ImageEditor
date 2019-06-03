@@ -10,6 +10,7 @@
     <Grid>
         <Image Name="OriginalImage" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="360"/>
         <Image Name="EditedImage" HorizontalAlignment="Left" Height="355" Margin="390,25,0,0" VerticalAlignment="Top" Width="515" />
+        <Button Content="Edit Other Image" HorizontalAlignment="Left" Height="50" Margin="60,345,0,0" VerticalAlignment="Top" Width="125" Click="ReplayButton_Click"/>
 
 
     </Grid>

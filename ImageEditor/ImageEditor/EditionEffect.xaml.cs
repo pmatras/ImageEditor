@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ImageEditor
+namespace ImageEditor  //najpierw podglad zedytyowanego obrazu, potem button do zapisywania
 {
     public partial class EditionEffect : Window
     {
@@ -32,6 +32,14 @@ namespace ImageEditor
 
             OriginalImage.Source = originalImage; //dodać exceptions
             EditedImage.Source = editedImage;
+        }
+
+        private void ReplayButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+
+            this.Close();
         }
     }
 }
