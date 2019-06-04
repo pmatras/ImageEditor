@@ -196,6 +196,21 @@ namespace ImageEditor
             this.Close();
 
         }
+
+        private void HistogramStretching_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
+
+            IEditImage imageEditor = new HistogramStretchingEffect();
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+
+            this.Close();
+
+        }
     }
 
     class EffectSelector

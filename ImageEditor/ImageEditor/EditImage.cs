@@ -329,4 +329,89 @@ namespace ImageEditor
             }
         }
     }
+
+    class HistogramStretchingEffect : IEditImage
+    {
+        private List<double> LUT_R;
+        private List<double> LUT_G;
+        private List<double> LUT_B;
+
+        private const int maxRGBValue = 255;
+        
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+            findMinMaxValuesOfComponentsInImage(imageToEdit, out int minRValue, out int maxRValue, out int minGValue, out int maxGValue, out int minBValue, out int maxBValue);              
+
+            this.LUT_R = makeLUTArray(minRValue, maxRValue);
+            this.LUT_G = makeLUTArray(minGValue, maxGValue);
+            this.LUT_B = makeLUTArray(minBValue, maxBValue);
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)LUT_R[pixel.R], (int)LUT_G[pixel.G], (int)LUT_B[pixel.B]));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
+        }
+
+        private void findMinMaxValuesOfComponentsInImage(Bitmap imageToAnalyze, out int minRValue, out int maxRValue, out int minGValue, out int maxGValue, out int minBValue, out int maxBValue)
+        {
+            Color pixel;
+
+            minRValue = 255;
+            maxRValue = 0;
+
+            minGValue = 255;
+            maxGValue = 0;
+
+            minBValue = 255;
+            maxBValue = 0;
+
+            for (int i = 0; i < imageToAnalyze.Width; ++i)
+                for (int j = 0; j < imageToAnalyze.Height; ++j)
+                {
+                    pixel = imageToAnalyze.GetPixel(i, j);
+
+                    if (pixel.R > maxRValue)
+                        maxRValue = pixel.R;
+                    if (pixel.R < minRValue)
+                        minRValue = pixel.R;
+
+                    if (pixel.G > maxGValue)
+                        maxGValue = pixel.G;
+                    if (pixel.G < minGValue)
+                        minGValue = pixel.G;
+
+                    if (pixel.B > maxBValue)
+                        maxBValue = pixel.B;
+                    if (pixel.B < minBValue)
+                        minBValue = pixel.B;
+                }
+        }
+        private List<double> makeLUTArray(int minComponentValue, int maxComponentValue)
+        {
+            List<double> LUTArray = new List<double>();
+
+            double newStretchedPixel;
+
+            for(int i = 0; i < 256; ++i)
+            {
+                newStretchedPixel = (maxRGBValue / (maxComponentValue - minComponentValue)) * (i - minComponentValue);
+
+                if (newStretchedPixel > 255)
+                    newStretchedPixel = 255;
+                if (newStretchedPixel < 0)
+                    newStretchedPixel = 0;
+
+                LUTArray.Add(newStretchedPixel);
+            }
+
+            return LUTArray;
+        }
+    }
 }
