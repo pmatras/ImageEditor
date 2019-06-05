@@ -6,6 +6,10 @@ This program is my project for Computer Programming at studies.
 
 ## Example Images edited by Image Editor
 
+![Koala in grayness scale](https://raw.githubusercontent.com/birdman98/ImageEditor/adding-new-features/editedImages/KoalaBlackWhite.jpg)
+
+![Lenna after histogram stretching](https://raw.githubusercontent.com/birdman98/ImageEditor/adding-new-features/editedImages/lennaStretched.jpg)
+
 ## Built with
 
 * **C#** - programming language
