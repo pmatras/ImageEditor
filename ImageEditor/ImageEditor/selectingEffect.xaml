@@ -11,19 +11,19 @@
             <ColumnDefinition Width="140*"/>
             <ColumnDefinition Width="47*"/>
         </Grid.ColumnDefinitions>
-        <Image Name="OriginalImage" HorizontalAlignment="Left" Height="360" Margin="-15,-5,0,0" VerticalAlignment="Top" Width="555"/>
+        <Image Name="OriginalImage" HorizontalAlignment="Left" Height="360" Margin="-15,-5,0,0" VerticalAlignment="Top" Width="545"/>
         <Label Content="Selected image" HorizontalAlignment="Left" Height="45" Margin="0,360,0,-17" VerticalAlignment="Top" Width="99"/>
-        <Button Content="Black-White" HorizontalAlignment="Left" Height="50" Margin="560,0,0,0" VerticalAlignment="Top" Width="157" Click="blackWhite_click" Grid.ColumnSpan="2"/>
-        <Button Content="Sepia" HorizontalAlignment="Left" Height="50" Margin="560,65,0,0" VerticalAlignment="Top" Width="157" Click="sepia_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Negative" HorizontalAlignment="Left" Height="50" Margin="560,135,0,0" VerticalAlignment="Top" Width="157" Click="Negative_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Brightness" HorizontalAlignment="Left" Height="50" Margin="560,205,0,0" VerticalAlignment="Top" Width="157" Click="Brightness_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Color" HorizontalAlignment="Left" Height="50" Margin="560,280,0,0" VerticalAlignment="Top" Width="157" Click="Color_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Invert Colors" HorizontalAlignment="Left" Height="50" Margin="740,0,0,0" VerticalAlignment="Top" Width="157" Click="InvertColors_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Gauss Bluring" HorizontalAlignment="Left" Height="50" Margin="740,65,0,0" VerticalAlignment="Top" Width="157" Click="GaussBlur_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Gamma Filtering" HorizontalAlignment="Left" Height="50" Margin="740,135,0,0" VerticalAlignment="Top" Width="157" Click="GammaFiltering_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Crop Image" HorizontalAlignment="Left" Height="50" Margin="740,205,0,0" VerticalAlignment="Top" Width="157" Click="CropImage_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Contrast" HorizontalAlignment="Left" Height="50" Margin="740,280,0,0" VerticalAlignment="Top" Width="157" Click="Contrast_Click" Grid.ColumnSpan="2" RenderTransformOrigin="0.688,0.5"/>
-        <Button Content="Histogram Stretching" Grid.Column="1" HorizontalAlignment="Left" Height="50" Margin="114,0,0,0" VerticalAlignment="Top" Width="157" Click="HistogramStretching_Click"/>
+        <Button Content="Black-White" HorizontalAlignment="Left" Height="50" Margin="535,-5,0,0" VerticalAlignment="Top" Width="157" Click="blackWhite_click"/>
+        <Button Content="Sepia" HorizontalAlignment="Left" Height="50" Margin="535,65,0,0" VerticalAlignment="Top" Width="157" Click="sepia_Click"/>
+        <Button Content="Negative" HorizontalAlignment="Left" Height="50" Margin="535,135,0,0" VerticalAlignment="Top" Width="157" Click="Negative_Click"/>
+        <Button Content="Brightness" HorizontalAlignment="Left" Height="50" Margin="535,205,0,0" VerticalAlignment="Top" Width="157" Click="Brightness_Click"/>
+        <Button Content="Color" HorizontalAlignment="Left" Height="50" Margin="535,280,0,0" VerticalAlignment="Top" Width="157" Click="Color_Click"/>
+        <Button Content="Invert Colors" HorizontalAlignment="Left" Height="50" Margin="723,-5,0,0" VerticalAlignment="Top" Width="157" Click="InvertColors_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Gauss Bluring" HorizontalAlignment="Left" Height="50" Margin="723,65,0,0" VerticalAlignment="Top" Width="157" Click="GaussBlur_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Gamma Filtering" HorizontalAlignment="Left" Height="50" Margin="723,135,0,0" VerticalAlignment="Top" Width="157" Click="GammaFiltering_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Crop Image" HorizontalAlignment="Left" Height="50" Margin="723,205,0,0" VerticalAlignment="Top" Width="157" Click="CropImage_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Contrast" HorizontalAlignment="Left" Height="50" Margin="723,280,0,0" VerticalAlignment="Top" Width="157" Click="Contrast_Click" Grid.ColumnSpan="2" RenderTransformOrigin="0.688,0.5"/>
+        <Button Content="Histogram Stretching" Grid.Column="1" HorizontalAlignment="Left" Height="50" Margin="104,-5,0,0" VerticalAlignment="Top" Width="157" Click="HistogramStretching_Click"/>
 
     </Grid>
 </Window>
