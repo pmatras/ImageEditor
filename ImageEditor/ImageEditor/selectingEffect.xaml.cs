@@ -8,7 +8,7 @@ using ImageEditor;
 
 namespace ImageEditor
 {
-
+    enum colors { Red, Green, Blue };
     public partial class selectingEffect : Window
     {
         public selectingEffect()
@@ -120,37 +120,50 @@ namespace ImageEditor
 
         }
 
-        private void Color_Click(object sender, RoutedEventArgs e) //naprawić, żeby działało na enumach
+        private void Color_Click(object sender, RoutedEventArgs e) 
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new ColorEffect();
-
-            //public enum colors { Red, Green, Blue };
+            IEditImage imageEditor = new ColorEffect();            
            
-            bool inputOK = false;
+            bool inputIsAColor = true;
 
             do
             {
 
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1); //na enumach
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1);
 
-                if (input == "red") //switch + enum
-                    ColorEffect.setColorOption(0);
-                if (input == "green")
-                    ColorEffect.setColorOption(1);
-                if (input == "blue")
-                    ColorEffect.setColorOption(2);
+                inputIsAColor = true;
 
-            } while (inputOK == false);
+                switch (input)
+                {
+                    case "red":
 
+                        ColorEffect.setColorOption((int)colors.Red);
+                        break;
 
+                    case "green":
 
+                        ColorEffect.setColorOption((int)colors.Green);
+                        break;
+
+                    case "blue":
+
+                        ColorEffect.setColorOption((int)colors.Blue);
+                        break;
+
+                    default:
+
+                        MessageBox.Show("Wrong color entered! Please try again.", "Wrong choice!");
+                        inputIsAColor = false;
+                        break;
+                }      
+               
+            } while (inputIsAColor == false);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
 
             this.Close();
         }    
