@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ImageEditor;
 using System.Drawing;
+
+using ImageEditor;
 
 namespace ImageEditor
 {
@@ -23,12 +15,25 @@ namespace ImageEditor
         {
             InitializeComponent();
 
-            BitmapImage sourceImage = new BitmapImage(); //if users didn't choose an image code to do nothing
-            sourceImage.BeginInit();
-            sourceImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
-            sourceImage.EndInit();
+            try
+            {
 
-            OriginalImage.Source = sourceImage; //dodać exceptions
+                BitmapImage sourceImage = new BitmapImage(); 
+                sourceImage.BeginInit();
+                sourceImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
+                sourceImage.EndInit();
+
+                OriginalImage.Source = sourceImage; 
+            }
+            catch (InvalidOperationException exception)
+            {
+                MessageBox.Show(exception.Message + "\nPlease choose image properly once again.", "Image isn't set!");
+
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+
+                this.Close();
+            }
 
         }
 
@@ -74,43 +79,41 @@ namespace ImageEditor
 
             IEditImage imageEditor = new BrightnessEffect();
 
-            bool inputOK = true;
+            bool inputIsANumber = false;
             int brightnessValue = 0;
 
             do
             {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1);
-
-
+                
                 try
                 {
-                    brightnessValue = Int32.Parse(input); //Parse vs TryParse??
+                    brightnessValue = Int32.Parse(input);
 
+                    inputIsANumber = true;
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    inputIsANumber = false;
                 }
 
-
-                if (brightnessValue < -255 || brightnessValue > 255)
+                if (inputIsANumber == true)
                 {
-                    MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
-                    inputOK = false;
+                    if (brightnessValue < -255 || brightnessValue > 255)
+                    {
+                        MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
+                        inputIsANumber = false;
+                    }                    
                 }
-                else
-                {
-                    inputOK = true;
-                }
-
             }
-            while (inputOK == false);
+            while (inputIsANumber == false);
 
 
             BrightnessEffect.setBrightnessValue(brightnessValue);
 
             imageEditor.editImage(imageToEdit);
-
             EffectSelector.showEditionResults();
 
             this.Close();
