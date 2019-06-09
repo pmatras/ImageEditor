@@ -209,24 +209,6 @@ namespace ImageEditor
         }
     }
 
-    class InvertColorsEffect : IEditImage
-    {
-        public void editImage(Bitmap imageToEdit)
-        {
-            Color pixel;
-
-            for(int i = 0; i < imageToEdit.Width; ++i)
-                for(int j=0; j < imageToEdit.Height; ++j)
-                {
-                    pixel = imageToEdit.GetPixel(i, j);
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb(255 - pixel.R, 255 - pixel.G, 255 - pixel.B));
-                }
-
-            UsersImage.saveEditedImage(imageToEdit);
-        }
-    }
-
     class GaussBlurEffect : IEditImage
     {
         public void editImage(Bitmap imageToEdit)

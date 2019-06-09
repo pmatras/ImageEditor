@@ -16,20 +16,20 @@ using System.Drawing;
 
 namespace ImageEditor
 {
-  
+
     public partial class selectingEffect : Window
     {
         public selectingEffect()
         {
-            InitializeComponent();     
-                  
+            InitializeComponent();
+
             BitmapImage sourceImage = new BitmapImage(); //if users didn't choose an image code to do nothing
             sourceImage.BeginInit();
             sourceImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
             sourceImage.EndInit();
 
             OriginalImage.Source = sourceImage; //dodać exceptions
-                       
+
         }
 
         private void blackWhite_click(object sender, RoutedEventArgs e)
@@ -65,7 +65,7 @@ namespace ImageEditor
 
             EffectSelector.showEditionResults();
             this.Close();
-            
+
         }
 
         private void Brightness_Click(object sender, RoutedEventArgs e)
@@ -74,40 +74,75 @@ namespace ImageEditor
 
             IEditImage imageEditor = new BrightnessEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1);
-            int brightnessValue = Int32.Parse(input);
+            bool inputOK = true;
+            int brightnessValue = 0;
 
-            if (brightnessValue < -255)
-                brightnessValue = -255;
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of brigthness between -255 and 255", "Enter value", "255", -1, -1);
 
-            if (brightnessValue > 255)
-                brightnessValue = 255;
+
+                try
+                {
+                    brightnessValue = Int32.Parse(input); //Parse vs TryParse??
+
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+                }
+
+
+                if (brightnessValue < -255 || brightnessValue > 255)
+                {
+                    MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
+                    inputOK = false;
+                }
+                else
+                {
+                    inputOK = true;
+                }
+
+            }
+            while (inputOK == false);
+
 
             BrightnessEffect.setBrightnessValue(brightnessValue);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-                        
 
             this.Close();
 
         }
 
-        private void Color_Click(object sender, RoutedEventArgs e)
+        private void Color_Click(object sender, RoutedEventArgs e) //naprawić, żeby działało na enumach
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
             IEditImage imageEditor = new ColorEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1); //na enumach
+            //public enum colors { Red, Green, Blue };
+           
+            bool inputOK = false;
 
-            if (input == "red") //switch + enum
-                ColorEffect.setColorOption(0);
-            if (input == "green")
-                ColorEffect.setColorOption(1);
-            if (input == "blue")
-                ColorEffect.setColorOption(2);
+            do
+            {
+
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1); //na enumach
+
+                if (input == "red") //switch + enum
+                    ColorEffect.setColorOption(0);
+                if (input == "green")
+                    ColorEffect.setColorOption(1);
+                if (input == "blue")
+                    ColorEffect.setColorOption(2);
+
+            } while (inputOK == false);
+
+
+
 
             imageEditor.editImage(imageToEdit);
 
@@ -115,23 +150,7 @@ namespace ImageEditor
 
 
             this.Close();
-
-        }
-
-        private void InvertColors_Click(object sender, RoutedEventArgs e)
-        {
-            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
-
-            IEditImage imageEditor = new InvertColorsEffect();
-                        
-            imageEditor.editImage(imageToEdit);
-
-            EffectSelector.showEditionResults();
-
-
-            this.Close();
-
-        }
+        }    
 
         private void GaussBlur_Click(object sender, RoutedEventArgs e)
         {
@@ -148,7 +167,7 @@ namespace ImageEditor
 
         }
 
-        private void GammaFiltering_Click(object sender, RoutedEventArgs e)
+        private void GammaFiltering_Click(object sender, RoutedEventArgs e) //ogarnac max mozliwosc wartosc do wybrania + sprawdzic algorytm i jaki max wsp gamma i zabezpieczenie przed zla wartoscia
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
             
