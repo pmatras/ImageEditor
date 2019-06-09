@@ -16,7 +16,7 @@ namespace ImageEditor  //najpierw podglad zedytyowanego obrazu, potem button do 
 {
     public partial class EditionEffect : Window
     {
-        public EditionEffect()
+        public EditionEffect() //dodać wyjątki
         {
             InitializeComponent();
 
