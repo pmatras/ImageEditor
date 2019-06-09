@@ -209,19 +209,68 @@ namespace ImageEditor
         }
     }
 
-    class GaussBlurEffect : IEditImage
+    class GaussianBlurEffect : IEditImage
     {
+        private const int FilterSize = 3;
+        private int[,] GaussFilterArray;
+        private int filterWeightsSum;
+
+        public GaussianBlurEffect()
+        {
+            this.GaussFilterArray = new int[FilterSize, FilterSize] 
+            { 
+                { 1, 2, 1 }, 
+                { 2, 4, 2 }, 
+                { 1, 2, 1 }, 
+            };
+
+            this.filterWeightsSum = 16;            
+        }
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
 
-            for(int i = 0; i < imageToEdit.Width; ++i)
-                for(int j = 0; j < imageToEdit.Height; ++j)
-                {
-                    pixel = imageToEdit.GetPixel(i, j);
+            int sumOfNeighborsR = 0;
+            int sumOfNeighborsG = 0;
+            int sumOfNeighborsB = 0;
 
+            int filterIteratorX = 0;
+            int filterIteratorY = 0;
+
+            for (int i = 1; i < imageToEdit.Width - 1; ++i)
+            {
+                for (int j = 1; j < imageToEdit.Height - 1; ++j)
+                {
+
+                    for (int k = i - 1; k <= i + 1; ++k)
+                    {
+                        for (int l = j - 1; l <= j + 1; ++l)
+                        {
+                            pixel = imageToEdit.GetPixel(k, l);
+
+                            sumOfNeighborsR += pixel.R * GaussFilterArray[filterIteratorX, filterIteratorY];
+                            sumOfNeighborsG += pixel.G * GaussFilterArray[filterIteratorX, filterIteratorY];
+                            sumOfNeighborsB += pixel.B * GaussFilterArray[filterIteratorX, filterIteratorY++];
+                        }
+                        ++filterIteratorX;
+                        filterIteratorY = 0;
+                    }
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(sumOfNeighborsR / filterWeightsSum, sumOfNeighborsG / filterWeightsSum, sumOfNeighborsB / filterWeightsSum));
+
+                    sumOfNeighborsR = 0;
+                    sumOfNeighborsG = 0;
+                    sumOfNeighborsB = 0;
+                    filterIteratorX = 0;
+                    filterIteratorY = 0;               
+                  
                 }
-        }
+
+            }
+
+            UsersImage.saveEditedImage(imageToEdit);
+        }     
+
     }
 
     class GammaFilteringEffect : IEditImage

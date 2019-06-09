@@ -168,11 +168,11 @@ namespace ImageEditor
             this.Close();
         }    
 
-        private void GaussBlur_Click(object sender, RoutedEventArgs e)
+        private void GaussianBlur_Click(object sender, RoutedEventArgs e)
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new GaussBlurEffect();
+            IEditImage imageEditor = new GaussianBlurEffect();
 
             imageEditor.editImage(imageToEdit);
 
