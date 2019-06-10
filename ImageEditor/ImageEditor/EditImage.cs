@@ -214,6 +214,7 @@ namespace ImageEditor
         private const int FilterSize = 5;
         private int[,] GaussFilterArray;
         private int filterWeightsSum;
+        private int offset;
 
         public GaussianBlurEffect()
         {
@@ -228,7 +229,9 @@ namespace ImageEditor
 
             for(int i = 0; i < FilterSize; ++i)
                 for(int j = 0; j < FilterSize; ++j)
-                    this.filterWeightsSum += GaussFilterArray[i, j];            
+                    this.filterWeightsSum += GaussFilterArray[i, j];
+
+            this.offset = (int)Math.Floor((double)FilterSize / 2);
         }
         public void editImage(Bitmap imageToEdit)
         {
@@ -241,14 +244,14 @@ namespace ImageEditor
             int filterIteratorX = 0;
             int filterIteratorY = 0;
 
-            for (int i = 2; i < imageToEdit.Width - 2; ++i) //przeniesc do zmiennej przesuniecie
+            for (int i = offset; i < imageToEdit.Width - offset; ++i) 
             {
-                for (int j = 2; j < imageToEdit.Height - 2; ++j)
+                for (int j = offset; j < imageToEdit.Height - offset; ++j)
                 {
 
-                    for (int k = i - 2; k <= i + 2; ++k)
+                    for (int k = i - offset; k <= i + offset; ++k)
                     {
-                        for (int l = j - 2; l <= j + 2; ++l)
+                        for (int l = j - offset; l <= j + offset; ++l)
                         {
                             pixel = imageToEdit.GetPixel(k, l);
 
