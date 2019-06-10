@@ -235,7 +235,20 @@ namespace ImageEditor
         }
         public void editImage(Bitmap imageToEdit)
         {
-            Color pixel;
+            var rectangle = new Rectangle(0, 0, imageToEdit.Width, imageToEdit.Height);
+            var data = imageToEdit.LockBits(rectangle, System.Drawing.Imaging.ImageLockMode.ReadWrite, imageToEdit.PixelFormat);
+            var depth = Bitmap.GetPixelFormatSize(data.PixelFormat) / 8;
+
+            var buffer = new byte[data.Width * data.Height * depth];
+
+            System.Runtime.InteropServices.Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
+
+            processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth);
+
+            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, data.Scan0, buffer.Length);
+            imageToEdit.UnlockBits(data);
+
+            /*Color pixel;
 
             int sumOfNeighborsR = 0;
             int sumOfNeighborsG = 0;
@@ -272,12 +285,58 @@ namespace ImageEditor
                     filterIteratorY = 0;               
                   
                 }
+                
+            }*/
+
+            UsersImage.saveEditedImage(imageToEdit);
+        } 
+        //test
+        public void processImage(byte[] pixelsBuffer, int startX, int startY, int endX, int endY, int width, int depth)
+        {
+            int sumOfNeighborsR = 0;
+            int sumOfNeighborsG = 0;
+            int sumOfNeighborsB = 0;
+
+            int filterIteratorX = 0;
+            int filterIteratorY = 0;
+
+            for (int i = startX; i < endX; ++i)
+            {
+                for (int j = startY; j < endY; ++j)
+                {
+
+                    for (int k = i - offset; k <= i + offset; ++k)
+                    {
+                        for (int l = j - offset; l <= j + offset; ++l)
+                        {
+                            int index = ((l * width) + k) * depth;
+
+                            sumOfNeighborsR += pixelsBuffer[index] * GaussFilterArray[filterIteratorX, filterIteratorY];
+                            sumOfNeighborsG += pixelsBuffer[index + 1] * GaussFilterArray[filterIteratorX, filterIteratorY];
+                            sumOfNeighborsB += pixelsBuffer[index + 2] * GaussFilterArray[filterIteratorX, filterIteratorY++];
+                        }
+                        ++filterIteratorX;
+                        filterIteratorY = 0;
+                    }
+
+                    int indexToSet = ((j * width) + i) * depth;
+
+                    pixelsBuffer[indexToSet] = (byte) (sumOfNeighborsR / filterWeightsSum);
+                    pixelsBuffer[indexToSet + 1] = (byte)(sumOfNeighborsG / filterWeightsSum);
+                    pixelsBuffer[indexToSet + 2] = (byte)(sumOfNeighborsB / filterWeightsSum);
+                    
+                    sumOfNeighborsR = 0;
+                    sumOfNeighborsG = 0;
+                    sumOfNeighborsB = 0;
+                    filterIteratorX = 0;
+                    filterIteratorY = 0;
+
+                }
 
             }
 
-            UsersImage.saveEditedImage(imageToEdit);
-        }     
-
+        }
+        //test
     }
 
     class GammaFilteringEffect : IEditImage
