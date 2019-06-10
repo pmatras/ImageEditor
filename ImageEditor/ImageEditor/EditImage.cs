@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Drawing;
 using System.Collections;
 
@@ -215,6 +216,7 @@ namespace ImageEditor
         private int[,] GaussFilterArray;
         private int filterWeightsSum;
         private int offset;
+        private int threadsCount;
 
         public GaussianBlurEffect()
         {
@@ -242,56 +244,24 @@ namespace ImageEditor
             var buffer = new byte[data.Width * data.Height * depth];
 
             System.Runtime.InteropServices.Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
+             
+            this.threadsCount = 2;
+            Thread imageConverterThread1 = new Thread(() => processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height / threadsCount, imageToEdit.Width, depth));
+            Thread imageConverterThread2 = new Thread(() => processImage(buffer, offset, imageToEdit.Height / threadsCount, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth));
 
-            processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth);
+            imageConverterThread1.Start();
+            imageConverterThread2.Start();
+            imageConverterThread1.Join();
+            imageConverterThread2.Join();
 
             System.Runtime.InteropServices.Marshal.Copy(buffer, 0, data.Scan0, buffer.Length);
             imageToEdit.UnlockBits(data);
-
-            /*Color pixel;
-
-            int sumOfNeighborsR = 0;
-            int sumOfNeighborsG = 0;
-            int sumOfNeighborsB = 0;
-
-            int filterIteratorX = 0;
-            int filterIteratorY = 0;
-
-            for (int i = offset; i < imageToEdit.Width - offset; ++i) 
-            {
-                for (int j = offset; j < imageToEdit.Height - offset; ++j)
-                {
-
-                    for (int k = i - offset; k <= i + offset; ++k)
-                    {
-                        for (int l = j - offset; l <= j + offset; ++l)
-                        {
-                            pixel = imageToEdit.GetPixel(k, l);
-
-                            sumOfNeighborsR += pixel.R * GaussFilterArray[filterIteratorX, filterIteratorY];
-                            sumOfNeighborsG += pixel.G * GaussFilterArray[filterIteratorX, filterIteratorY];
-                            sumOfNeighborsB += pixel.B * GaussFilterArray[filterIteratorX, filterIteratorY++];
-                        }
-                        ++filterIteratorX;
-                        filterIteratorY = 0;
-                    }
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb(sumOfNeighborsR / filterWeightsSum, sumOfNeighborsG / filterWeightsSum, sumOfNeighborsB / filterWeightsSum));
-
-                    sumOfNeighborsR = 0;
-                    sumOfNeighborsG = 0;
-                    sumOfNeighborsB = 0;
-                    filterIteratorX = 0;
-                    filterIteratorY = 0;               
-                  
-                }
-                
-            }*/
+                      
 
             UsersImage.saveEditedImage(imageToEdit);
         } 
-        //test
-        public void processImage(byte[] pixelsBuffer, int startX, int startY, int endX, int endY, int width, int depth)
+        
+        private void processImage(byte[] pixelsBuffer, int startX, int startY, int endX, int endY, int width, int depth)
         {
             int sumOfNeighborsR = 0;
             int sumOfNeighborsG = 0;
@@ -336,7 +306,7 @@ namespace ImageEditor
             }
 
         }
-        //test
+        
     }
 
     class GammaFilteringEffect : IEditImage
