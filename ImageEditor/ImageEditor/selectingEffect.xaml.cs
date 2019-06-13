@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Drawing;
@@ -25,7 +24,7 @@ namespace ImageEditor
 
                 OriginalImage.Source = sourceImage; 
             }
-            catch (InvalidOperationException exception)
+            catch (Exception exception)
             {
                 MessageBox.Show(exception.Message + "\nPlease choose image properly once again.", "Image isn't set!");
 
@@ -33,6 +32,7 @@ namespace ImageEditor
                 mainWindow.Show();
 
                 this.Close();
+
             }
 
         }
@@ -79,7 +79,7 @@ namespace ImageEditor
 
             IEditImage imageEditor = new BrightnessEffect();
 
-            bool inputIsANumber = false;
+            bool correctInput = false;
             int brightnessValue = 0;
 
             do
@@ -90,32 +90,32 @@ namespace ImageEditor
                 {
                     brightnessValue = Int32.Parse(input);
 
-                    inputIsANumber = true;
+                    correctInput = true;
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show("An error occured: " + exception.Message, "Error!");
 
-                    inputIsANumber = false;
+                    correctInput = false;
                 }
 
-                if (inputIsANumber == true)
+                if (correctInput == true)
                 {
                     if (brightnessValue < -255 || brightnessValue > 255)
                     {
                         MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
-                        inputIsANumber = false;
+                        correctInput = false;
                     }                    
                 }
             }
-            while (inputIsANumber == false);
+            while (correctInput == false);
 
 
             BrightnessEffect.setBrightnessValue(brightnessValue);
 
             imageEditor.editImage(imageToEdit);
-            EffectSelector.showEditionResults();
 
+            EffectSelector.showEditionResults();
             this.Close();
 
         }
@@ -126,14 +126,14 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ColorEffect();            
            
-            bool inputIsAColor = true;
+            bool correctInput = true;
 
             do
             {
 
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1);
 
-                inputIsAColor = true;
+                correctInput = true;
 
                 switch (input)
                 {
@@ -155,16 +155,15 @@ namespace ImageEditor
                     default:
 
                         MessageBox.Show("Wrong color entered! Please try again.", "Wrong choice!");
-                        inputIsAColor = false;
+                        correctInput = false;
                         break;
                 }      
                
-            } while (inputIsAColor == false);
+            } while (correctInput == false);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
             this.Close();
         }    
 
@@ -173,12 +172,9 @@ namespace ImageEditor
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
             IEditImage imageEditor = new GaussianBlurEffect();
-
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
 
         }
@@ -208,7 +204,7 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ChangeExposureEffect();
 
-            bool inputIsANumber = false;
+            bool correctInput = false;
             double exposureValue = 0;
 
             do
@@ -219,25 +215,25 @@ namespace ImageEditor
                 {
                     exposureValue = Int32.Parse(input);
 
-                    inputIsANumber = true;
+                    correctInput = true;
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show("An error occured: " + exception.Message, "Error!");
 
-                    inputIsANumber = false;
+                    correctInput = false;
                 }
 
-                if (inputIsANumber == true)
+                if (correctInput == true)
                 {
                     if (exposureValue < -10 || exposureValue > 10)
                     {
                         MessageBox.Show("Entered value isn't in range between -10 and 10. Please try again!", "Wrong value!");
-                        inputIsANumber = false;
+                        correctInput = false;
                     }
                 }
             }
-            while (inputIsANumber == false);
+            while (correctInput == false);
 
 
             ChangeExposureEffect.setExposureCorrectnessRatio(Math.Pow(2.0, exposureValue));
