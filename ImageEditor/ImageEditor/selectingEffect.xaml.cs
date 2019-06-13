@@ -204,7 +204,15 @@ namespace ImageEditor
 
         private void CropImage_Click(object sender, RoutedEventArgs e)
         {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
+            IEditImage imageEditor = new CropImageEffect();
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+            this.Close();
         }
 
         private void Contrast_Click(object sender, RoutedEventArgs e)

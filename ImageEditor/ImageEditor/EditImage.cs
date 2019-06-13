@@ -348,6 +348,14 @@ namespace ImageEditor
         }
     }
 
+    class CropImageEffect : IEditImage
+    {
+        public void editImage(Bitmap imageToEdit)
+        {
+            Color pixel;
+
+        }
+    }
     class ChangeContrastEffect : IEditImage
     {
         private List<double> LUT;
