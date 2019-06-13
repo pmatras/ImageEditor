@@ -184,11 +184,40 @@ namespace ImageEditor
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
             
             IEditImage imageEditor = new GammaFilteringEffect();
+                         
+            bool correctInput = false;
+            double gammaValue = 0;
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio.", "Enter value of gamma", "1", -1, -1);
-            Int32.TryParse(input, out int gammaValue);
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio between 0.2 and 5.", "Enter value of gamma", "1", -1, -1);
+
+                try
+                {
+                    gammaValue = Double.Parse(input);
+
+                    correctInput = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    correctInput = false;
+                }
+
+                if (correctInput == true)
+                {
+                    if (gammaValue < 0.2 || gammaValue > 5)
+                    {
+                        MessageBox.Show("Entered value isn't in range between 0,2 and 5. Please try again!", "Wrong value!");
+                        correctInput = false;
+                    }
+                }
+            }
+            while (correctInput == false);
+            
+
             GammaFilteringEffect.setGammaValue(gammaValue);
-
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
@@ -213,7 +242,7 @@ namespace ImageEditor
 
                 try
                 {
-                    exposureValue = Int32.Parse(input);
+                    exposureValue = Double.Parse(input);
 
                     correctInput = true;
                 }
@@ -251,21 +280,42 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ChangeContrastEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -255 and 255.", "Enter value of contrast adjustment", "50", -1, -1);
-            Int32.TryParse(input, out int contrastValue);
+            bool correctInput = false;
+            int contrastValue = 0;
 
-            if (contrastValue > 255)
-                contrastValue = 255;
-            else if (contrastValue < -255)
-                contrastValue = -255;
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -255 and 255.", "Enter value of contrast adjustment", "50", -1, -1);
 
+                try
+                {
+                    contrastValue = Int32.Parse(input);
+
+                    correctInput = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    correctInput = false;
+                }
+
+                if (correctInput == true)
+                {
+                    if (contrastValue < -255 || contrastValue > 255)
+                    {
+                        MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
+                        correctInput = false;
+                    }
+                }
+            }
+            while (correctInput == false);
+            
             ChangeContrastEffect.setContrastValue(contrastValue);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
 
         }
