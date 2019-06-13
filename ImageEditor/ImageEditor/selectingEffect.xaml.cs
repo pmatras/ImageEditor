@@ -202,11 +202,45 @@ namespace ImageEditor
 
         }
 
-        private void CropImage_Click(object sender, RoutedEventArgs e)
+        private void ChangeExposure_Click(object sender, RoutedEventArgs e)
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new CropImageEffect();
+            IEditImage imageEditor = new ChangeExposureEffect();
+
+            bool inputIsANumber = false;
+            double exposureValue = 0;
+
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of Exposure Value between -10 and 10", "Enter value", "2", -1, -1);
+
+                try
+                {
+                    exposureValue = Int32.Parse(input);
+
+                    inputIsANumber = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    inputIsANumber = false;
+                }
+
+                if (inputIsANumber == true)
+                {
+                    if (exposureValue < -10 || exposureValue > 10)
+                    {
+                        MessageBox.Show("Entered value isn't in range between -10 and 10. Please try again!", "Wrong value!");
+                        inputIsANumber = false;
+                    }
+                }
+            }
+            while (inputIsANumber == false);
+
+
+            ChangeExposureEffect.setExposureCorrectnessRatio(Math.Pow(2.0, exposureValue));
 
             imageEditor.editImage(imageToEdit);
 

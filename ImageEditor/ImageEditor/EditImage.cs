@@ -348,11 +348,61 @@ namespace ImageEditor
         }
     }
 
-    class CropImageEffect : IEditImage
+    class ChangeExposureEffect : IEditImage
     {
+        private const int maxRGBValue = 255;
+        private static double exposureCorrectnessRatio;
+        
+        public static void setExposureCorrectnessRatio(double value)
+        {
+            exposureCorrectnessRatio = value;
+        }
+
+        private List<int> LUT;
         public void editImage(Bitmap imageToEdit)
         {
+            makeLUTArray();
+
             Color pixel;
+            int newRValue = 0;
+            int newGValue = 0;
+            int newBValue = 0;
+
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+
+                    newRValue = LUT[pixel.R];
+                    newGValue = LUT[pixel.G];
+                    newBValue = LUT[pixel.B];
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(newRValue, newGValue, newBValue));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
+            
+        }
+
+        private void makeLUTArray()
+        {
+            this.LUT = new List<int>();
+
+            double newPixelValue = 0;
+
+            for(int i = 0; i < 256; ++i)
+            {
+                newPixelValue = exposureCorrectnessRatio * i;
+
+                if (newPixelValue < maxRGBValue)
+                {
+                    LUT.Add((int)newPixelValue);
+                }
+                else
+                {
+                    LUT.Add(maxRGBValue);
+                }
+            }
 
         }
     }
