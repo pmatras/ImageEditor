@@ -8,7 +8,7 @@
         Title="Image Editor" Height="300" Width="500" Icon="./resources/image.ico" Background="DarkGray" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,2">
         <Button x:Name="LoadImageButton" Content="Load Image" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" FontSize="20" FontFamily="Consolas" Click="LoadImageButton_Click" Margin="175,120,175,110" Height="40"/>
-        <TextBlock HorizontalAlignment="Center" TextWrapping="NoWrap" FontSize ="24" Text="     Welcome in Image Editor,&#10; please select a file to work with." VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="43,10,40,0" Height="76" Width="358"/>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="NoWrap" FontSize ="24" Text="     Welcome in Image Editor,&#10; please select an image to work with." VerticalAlignment="Top" Margin="55,10,40,0" Height="76" Width="397"/>
         <Button Content="Program info" HorizontalAlignment="Left" Margin="35,220,0,0" VerticalAlignment="Top" Width="75" Click="ProgramInfo_Click"/>
 
     </Grid>
