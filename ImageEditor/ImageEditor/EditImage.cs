@@ -238,6 +238,7 @@ namespace ImageEditor
         private int[,] GaussFilterArray;
         private int filterWeightsSum;
         private int offset;
+        private const int bitsInByte = 8;
         private int threadsCount;
 
         public GaussianBlurEffect()
@@ -261,20 +262,20 @@ namespace ImageEditor
         {
             var rectangle = new Rectangle(0, 0, imageToEdit.Width, imageToEdit.Height);
             var data = imageToEdit.LockBits(rectangle, System.Drawing.Imaging.ImageLockMode.ReadWrite, imageToEdit.PixelFormat);
-            var depth = Bitmap.GetPixelFormatSize(data.PixelFormat) / 8;
+            var depth = Bitmap.GetPixelFormatSize(data.PixelFormat) / bitsInByte;
 
             var buffer = new byte[data.Width * data.Height * depth];
 
             System.Runtime.InteropServices.Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
              
             this.threadsCount = 2;
-            Thread imageConverterThread1 = new Thread(() => processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height / threadsCount, imageToEdit.Width, depth));
-            Thread imageConverterThread2 = new Thread(() => processImage(buffer, offset, imageToEdit.Height / threadsCount, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth));
+            Thread GaussianBlurThread1 = new Thread(() => processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height / threadsCount, imageToEdit.Width, depth));
+            Thread GaussianBlurThread2 = new Thread(() => processImage(buffer, offset, imageToEdit.Height / threadsCount, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth));
 
-            imageConverterThread1.Start();
-            imageConverterThread2.Start();
-            imageConverterThread1.Join();
-            imageConverterThread2.Join();
+            GaussianBlurThread1.Start();
+            GaussianBlurThread2.Start();
+            GaussianBlurThread1.Join();
+            GaussianBlurThread2.Join();
 
             System.Runtime.InteropServices.Marshal.Copy(buffer, 0, data.Scan0, buffer.Length);
             imageToEdit.UnlockBits(data);
