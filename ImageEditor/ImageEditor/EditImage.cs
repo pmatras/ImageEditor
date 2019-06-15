@@ -16,16 +16,13 @@ namespace ImageEditor
 
     class BlackWhiteEffect : IEditImage
     {
-        //Dictionary<int, int> ColorToGraynessPixels;
+        private List<int> graynessRPixels;
+        private List<int> graynessGPixels;
+        private List<int> graynessBPixels;
         public void editImage(Bitmap imageToEdit)
         {
-            /*ColorToGraynessPixels = new Dictionary<int, int>();
+            makeGraynessPixelsLists(); 
 
-            for(int i = 0; i < 256; ++i)
-            {
-                int newPixelValue = 
-                ColorToGraynessPixels.Add(key: i, value: newPixelValue);
-            }*/
             Color pixel;
 
             for(int i = 0; i < imageToEdit.Width; ++i)
@@ -33,13 +30,28 @@ namespace ImageEditor
                 {
                     pixel = imageToEdit.GetPixel(i, j);
 
-
-                    var GraynessPixel = 0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B;
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)GraynessPixel, (int)GraynessPixel, (int)GraynessPixel));
+                    int newPixelValue = graynessRPixels[pixel.R] + graynessGPixels[pixel.G] + graynessBPixels[pixel.B];
+                                                           
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(newPixelValue, newPixelValue, newPixelValue));
                     
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
+        }
+
+        private void makeGraynessPixelsLists()
+        {
+            this.graynessRPixels = new List<int>();
+            this.graynessGPixels = new List<int>();
+            this.graynessBPixels = new List<int>();
+
+            for(int i = 0; i < 256; ++i)
+            {
+                graynessRPixels.Add((int)(0.299 * i));
+                graynessGPixels.Add((int)(0.587 * i));
+                graynessBPixels.Add((int)(0.114 * i));
+            }
+
         }
     }
 
@@ -309,10 +321,10 @@ namespace ImageEditor
         
     }
 
-    class GammaFilteringEffect : IEditImage
+    class GammaFilteringEffect : IEditImage //przejrzec tworzenie LUT
     {
-        private static int gammaValue; //oddzielna wartość dla każdego kanału RGB??
-        public static void setGammaValue(int value)
+        private static double gammaValue; //oddzielna wartość dla każdego kanału RGB??
+        public static void setGammaValue(double value)
         {
             gammaValue = value;
         }
