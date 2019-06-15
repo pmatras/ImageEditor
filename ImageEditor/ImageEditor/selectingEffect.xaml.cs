@@ -180,19 +180,20 @@ namespace ImageEditor
 
         }
 
-        private void GammaFiltering_Click(object sender, RoutedEventArgs e) //ogarnac max mozliwosc wartosc do wybrania + sprawdzic algorytm i jaki max wsp gamma i zabezpieczenie przed zla wartoscia
+        private void GammaCorrection_Click(object sender, RoutedEventArgs e) 
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
             
-            IEditImage imageEditor = new GammaFilteringEffect();
+            IEditImage imageEditor = new GammaCorrectionEffect();
                          
             bool correctInput = false;
             double gammaValue = 0;
 
             do
             {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio between 0.2 and 5.", "Enter value of gamma", "1", -1, -1);
-
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio between 0,2 and 5.", "Enter value of gamma", "1", -1, -1);
+                input = input.Replace('.', ',');
+                
                 try
                 {
                     gammaValue = Double.Parse(input);
@@ -218,7 +219,7 @@ namespace ImageEditor
             while (correctInput == false);
             
 
-            GammaFilteringEffect.setGammaValue(gammaValue);
+            GammaCorrectionEffect.setGammaValue(gammaValue);
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
