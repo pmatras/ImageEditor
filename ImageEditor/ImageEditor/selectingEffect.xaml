@@ -15,7 +15,7 @@
         <Label Content="Selected image" HorizontalAlignment="Left" Height="45" Margin="0,360,0,-17" VerticalAlignment="Top" Width="99"/>
         <Button Content="Black-White" HorizontalAlignment="Left" Height="50" Margin="535,-5,0,0" VerticalAlignment="Top" Width="157" Click="blackWhite_click"/>
         <Button Content="Sepia" HorizontalAlignment="Left" Height="50" Margin="535,65,0,0" VerticalAlignment="Top" Width="157" Click="sepia_Click"/>
-        <Button Content="Negative" HorizontalAlignment="Left" Height="50" Margin="535,135,0,0" VerticalAlignment="Top" Width="157" Click="Negative_Click"/>
+        <Button Content="Invert Colors" HorizontalAlignment="Left" Height="50" Margin="535,135,0,0" VerticalAlignment="Top" Width="157" Click="InvertColors_Click"/>
         <Button Content="Brightness" HorizontalAlignment="Left" Height="50" Margin="535,205,0,0" VerticalAlignment="Top" Width="157" Click="Brightness_Click"/>
         <Button Content="Color" HorizontalAlignment="Left" Height="50" Margin="535,280,0,0" VerticalAlignment="Top" Width="157" Click="Color_Click"/>
         <Button Content="Gaussian Blur" HorizontalAlignment="Left" Height="50" Margin="723,65,0,0" VerticalAlignment="Top" Width="157" Click="GaussianBlur_Click" Grid.ColumnSpan="2"/>

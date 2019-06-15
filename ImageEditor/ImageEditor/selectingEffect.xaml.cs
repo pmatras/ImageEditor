@@ -61,11 +61,11 @@ namespace ImageEditor
 
         }
 
-        private void Negative_Click(object sender, RoutedEventArgs e)
+        private void InvertColors_Click(object sender, RoutedEventArgs e)
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new NegativeEffect();
+            IEditImage imageEditor = new InvertColorsEffect();
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();

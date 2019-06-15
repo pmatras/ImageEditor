@@ -55,7 +55,7 @@ namespace ImageEditor
         }
     }
 
-    class NegativeEffect : IEditImage
+    class InvertColorsEffect : IEditImage
     {
         private const int maxRGBValue = 255;
         public void editImage(Bitmap imageToEdit)
@@ -71,7 +71,7 @@ namespace ImageEditor
                     var NegativePixelG = maxRGBValue - pixel.G;
                     var NegativePixelB = maxRGBValue - pixel.B;
 
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(NegativePixelR, NegativePixelG, NegativePixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
