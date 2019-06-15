@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Drawing;
@@ -25,7 +24,7 @@ namespace ImageEditor
 
                 OriginalImage.Source = sourceImage; 
             }
-            catch (InvalidOperationException exception)
+            catch (Exception exception)
             {
                 MessageBox.Show(exception.Message + "\nPlease choose image properly once again.", "Image isn't set!");
 
@@ -33,6 +32,7 @@ namespace ImageEditor
                 mainWindow.Show();
 
                 this.Close();
+
             }
 
         }
@@ -61,11 +61,11 @@ namespace ImageEditor
 
         }
 
-        private void Negative_Click(object sender, RoutedEventArgs e)
+        private void InvertColors_Click(object sender, RoutedEventArgs e)
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
-            IEditImage imageEditor = new NegativeEffect();
+            IEditImage imageEditor = new InvertColorsEffect();
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
@@ -79,7 +79,7 @@ namespace ImageEditor
 
             IEditImage imageEditor = new BrightnessEffect();
 
-            bool inputIsANumber = false;
+            bool correctInput = false;
             int brightnessValue = 0;
 
             do
@@ -90,32 +90,32 @@ namespace ImageEditor
                 {
                     brightnessValue = Int32.Parse(input);
 
-                    inputIsANumber = true;
+                    correctInput = true;
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show("An error occured: " + exception.Message, "Error!");
 
-                    inputIsANumber = false;
+                    correctInput = false;
                 }
 
-                if (inputIsANumber == true)
+                if (correctInput == true)
                 {
                     if (brightnessValue < -255 || brightnessValue > 255)
                     {
                         MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
-                        inputIsANumber = false;
+                        correctInput = false;
                     }                    
                 }
             }
-            while (inputIsANumber == false);
+            while (correctInput == false);
 
 
             BrightnessEffect.setBrightnessValue(brightnessValue);
 
             imageEditor.editImage(imageToEdit);
-            EffectSelector.showEditionResults();
 
+            EffectSelector.showEditionResults();
             this.Close();
 
         }
@@ -126,15 +126,16 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ColorEffect();            
            
-            bool inputIsAColor = true;
+            bool correctInput = true;
 
             do
             {
 
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1);
+                input = input.ToLower();
 
-                inputIsAColor = true;
-
+                correctInput = true;
+                
                 switch (input)
                 {
                     case "red":
@@ -155,16 +156,15 @@ namespace ImageEditor
                     default:
 
                         MessageBox.Show("Wrong color entered! Please try again.", "Wrong choice!");
-                        inputIsAColor = false;
+                        correctInput = false;
                         break;
                 }      
                
-            } while (inputIsAColor == false);
+            } while (correctInput == false);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
             this.Close();
         }    
 
@@ -173,26 +173,53 @@ namespace ImageEditor
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
             IEditImage imageEditor = new GaussianBlurEffect();
-
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
 
         }
 
-        private void GammaFiltering_Click(object sender, RoutedEventArgs e) //ogarnac max mozliwosc wartosc do wybrania + sprawdzic algorytm i jaki max wsp gamma i zabezpieczenie przed zla wartoscia
+        private void GammaCorrection_Click(object sender, RoutedEventArgs e) 
         {
             Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
             
-            IEditImage imageEditor = new GammaFilteringEffect();
+            IEditImage imageEditor = new GammaCorrectionEffect();
+                         
+            bool correctInput = false;
+            double gammaValue = 0;
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio.", "Enter value of gamma", "1", -1, -1);
-            Int32.TryParse(input, out int gammaValue);
-            GammaFilteringEffect.setGammaValue(gammaValue);
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of gamma filter ratio between 0,2 and 5.", "Enter value of gamma", "1", -1, -1);
+                input = input.Replace('.', ',');
+                
+                try
+                {
+                    gammaValue = Double.Parse(input);
 
+                    correctInput = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    correctInput = false;
+                }
+
+                if (correctInput == true)
+                {
+                    if (gammaValue < 0.2 || gammaValue > 5)
+                    {
+                        MessageBox.Show("Entered value isn't in range between 0,2 and 5. Please try again!", "Wrong value!");
+                        correctInput = false;
+                    }
+                }
+            }
+            while (correctInput == false);
+            
+
+            GammaCorrectionEffect.setGammaValue(gammaValue);
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
@@ -202,9 +229,52 @@ namespace ImageEditor
 
         }
 
-        private void CropImage_Click(object sender, RoutedEventArgs e)
+        private void ChangeExposure_Click(object sender, RoutedEventArgs e)
         {
+            Bitmap imageToEdit = EffectSelector.prepareImageToEdit();
 
+            IEditImage imageEditor = new ChangeExposureEffect();
+
+            bool correctInput = false;
+            double exposureValue = 0;
+
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of Exposure Value between -8 and 8", "Enter value", "2", -1, -1);
+                input = input.Replace(".", ",");
+
+                try
+                {
+                    exposureValue = Double.Parse(input);
+
+                    correctInput = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    correctInput = false;
+                }
+
+                if (correctInput == true)
+                {
+                    if (exposureValue < -8 || exposureValue > 8)
+                    {
+                        MessageBox.Show("Entered value isn't in range between -8 and 8. Please try again!", "Wrong value!");
+                        correctInput = false;
+                    }
+                }
+            }
+            while (correctInput == false);
+
+
+            ChangeExposureEffect.setExposureCorrectnessRatio(Math.Pow(2.0, exposureValue));
+
+            imageEditor.editImage(imageToEdit);
+
+            EffectSelector.showEditionResults();
+
+            this.Close();
         }
 
         private void Contrast_Click(object sender, RoutedEventArgs e)
@@ -213,21 +283,43 @@ namespace ImageEditor
 
             IEditImage imageEditor = new ChangeContrastEffect();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -255 and 255.", "Enter value of contrast adjustment", "50", -1, -1);
-            Int32.TryParse(input, out int contrastValue);
+            bool correctInput = false;
+            double contrastValue = 0;
 
-            if (contrastValue > 255)
-                contrastValue = 255;
-            else if (contrastValue < -255)
-                contrastValue = -255;
+            do
+            {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -100 and 100.", "Enter value of contrast adjustment", "50", -1, -1);
+                input = input.Replace(".", ",");
 
+                try
+                {
+                    contrastValue = Double.Parse(input);
+
+                    correctInput = true;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("An error occured: " + exception.Message, "Error!");
+
+                    correctInput = false;
+                }
+
+                if (correctInput == true)
+                {
+                    if (contrastValue < -100 || contrastValue > 100)
+                    {
+                        MessageBox.Show("Entered value isn't in range between -100 and 100. Please try again!", "Wrong value!");
+                        correctInput = false;
+                    }
+                }
+            }
+            while (correctInput == false);
+            
             ChangeContrastEffect.setContrastValue(contrastValue);
 
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
 
         }
@@ -241,10 +333,7 @@ namespace ImageEditor
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
-
         }
     }
 
@@ -254,7 +343,7 @@ namespace ImageEditor
         {
             UsersImage image = new UsersImage(); 
             Bitmap usersImage = image.loadImage();
-            Bitmap imageToEdit = UsersImage.makeCopyToEdit(usersImage);
+            Bitmap imageToEdit = image.makeCopyToEdit(usersImage);
 
             return imageToEdit;
         }

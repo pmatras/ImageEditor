@@ -16,16 +16,13 @@ namespace ImageEditor
 
     class BlackWhiteEffect : IEditImage
     {
-        //Dictionary<int, int> ColorToGraynessPixels;
+        private List<int> graynessRPixels;
+        private List<int> graynessGPixels;
+        private List<int> graynessBPixels;
         public void editImage(Bitmap imageToEdit)
         {
-            /*ColorToGraynessPixels = new Dictionary<int, int>();
+            makeGraynessPixelsLists(); 
 
-            for(int i = 0; i < 256; ++i)
-            {
-                int newPixelValue = 
-                ColorToGraynessPixels.Add(key: i, value: newPixelValue);
-            }*/
             Color pixel;
 
             for(int i = 0; i < imageToEdit.Width; ++i)
@@ -33,17 +30,32 @@ namespace ImageEditor
                 {
                     pixel = imageToEdit.GetPixel(i, j);
 
-
-                    var GraynessPixel = 0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B;
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)GraynessPixel, (int)GraynessPixel, (int)GraynessPixel));
+                    int newPixelValue = graynessRPixels[pixel.R] + graynessGPixels[pixel.G] + graynessBPixels[pixel.B];
+                                                           
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(newPixelValue, newPixelValue, newPixelValue));
                     
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
         }
+
+        private void makeGraynessPixelsLists()
+        {
+            this.graynessRPixels = new List<int>();
+            this.graynessGPixels = new List<int>();
+            this.graynessBPixels = new List<int>();
+
+            for(int i = 0; i < 256; ++i)
+            {
+                graynessRPixels.Add((int)(0.299 * i));
+                graynessGPixels.Add((int)(0.587 * i));
+                graynessBPixels.Add((int)(0.114 * i));
+            }
+
+        }
     }
 
-    class NegativeEffect : IEditImage
+    class InvertColorsEffect : IEditImage
     {
         private const int maxRGBValue = 255;
         public void editImage(Bitmap imageToEdit)
@@ -59,7 +71,7 @@ namespace ImageEditor
                     var NegativePixelG = maxRGBValue - pixel.G;
                     var NegativePixelB = maxRGBValue - pixel.B;
 
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(NegativePixelR, NegativePixelG, NegativePixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
@@ -68,40 +80,34 @@ namespace ImageEditor
 
     class SepiaEffect : IEditImage
     {
-        private const int maxRGBValue = 255;
-        private const int fillFactor = 20;
+        private const int maxRGBValue = 255;        
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
 
-            for (int i = 0; i < imageToEdit.Width; ++i)
-                for (int j = 0; j < imageToEdit.Height; ++j)
-                {
-                    pixel = imageToEdit.GetPixel(i, j);
-
-                    var NegativePixelR = maxRGBValue - pixel.R;
-                    var NegativePixelG = maxRGBValue - pixel.G;
-                    var NegativePixelB = maxRGBValue - pixel.B;
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
-                }
+            int SepiaPixelR = 0;
+            int SepiaPixelG = 0;
+            int SepiaPixelB = 0;
 
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
 
-                    var SepiaPixelR = pixel.R + 2 * fillFactor; //można przygotować gotową tablicę z wartościami pixeli
-                    if (SepiaPixelR > 255)
-                        SepiaPixelR = 255;
+                    SepiaPixelR = (int)(0.393 * pixel.R + 0.769 * pixel.G + 0.189 * pixel.B);
+                    SepiaPixelG = (int)(0.349 * pixel.R + 0.686 * pixel.G + 0.168 * pixel.B);
+                    SepiaPixelB = (int)(0.272 * pixel.R + 0.534 * pixel.G + 0.131 * pixel.B);
 
-                    var SepiaPixelG = pixel.G + fillFactor;
-                    if (SepiaPixelG > 255)
-                        SepiaPixelG = 255;
+                    if (SepiaPixelR > maxRGBValue)
+                        SepiaPixelR = maxRGBValue;
 
-                    var SepiaPixelB = pixel.B;
+                    if (SepiaPixelG > maxRGBValue)
+                        SepiaPixelG = maxRGBValue;
 
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)SepiaPixelR, (int)SepiaPixelG, (int)SepiaPixelB));
+                    if (SepiaPixelB > maxRGBValue)
+                        SepiaPixelB = maxRGBValue;
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(SepiaPixelR, SepiaPixelG, SepiaPixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
@@ -116,56 +122,63 @@ namespace ImageEditor
         {
             brightnessValue = usersBrightnessValue;
         }
-        
+
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
+        private List<int> brightenPixels;
+                
         public void editImage(Bitmap imageToEdit)
         {
+            makeBrightenPixelsList();
+
             Color pixel;
 
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
-
-                    var BrightPixelR = pixel.R + brightnessValue;
-                    var BrightPixelG = pixel.G + brightnessValue;
-                    var BrightPixelB = pixel.B + brightnessValue;
-
-                    if (BrightPixelR < 0)
-                        BrightPixelR = 0;
-                    if (BrightPixelR > 255)
-                        BrightPixelR = 255;
-
-                    if (BrightPixelG < 0)
-                        BrightPixelG = 0;
-                    if (BrightPixelG > 255)
-                        BrightPixelG = 255;
-
-                    if (BrightPixelB < 0)
-                        BrightPixelB = 0;
-                    if (BrightPixelB > 255)
-                        BrightPixelB = 255;
-                                        
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)BrightPixelR, (int)BrightPixelG, (int)BrightPixelB));
+                                     
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(brightenPixels[pixel.R], brightenPixels[pixel.G], brightenPixels[pixel.B]));
                 }
             UsersImage.saveEditedImage(imageToEdit);
         }
 
-        
+        private void makeBrightenPixelsList()
+        {
+            this.brightenPixels = new List<int>();
+            
+            int brightenPixel = 0;
+
+            for(int i = 0; i < 256; ++i)
+            {
+                brightenPixel = i + brightnessValue;
+
+                if (brightenPixel > maxRGBValue)
+                    brightenPixel = maxRGBValue;
+
+                if (brightenPixel < minRGBValue)
+                    brightenPixel = minRGBValue;
+
+                brightenPixels.Add(brightenPixel);
+
+            }
+        }        
         }
 
     class ColorEffect : IEditImage
-    {
-        public enum colorOptions { Red, Green, Blue }; //to w sumie to metody z obsluga zdarzenia
+    {        
         private static int colorOption;
         public static void setColorOption(int _colorOption)
         {
             colorOption = _colorOption;
         }
 
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
-
+                     
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
@@ -175,35 +188,44 @@ namespace ImageEditor
                     int ColoredPixelG = 0;
                     int ColoredPixelB = 0;
 
-                    if (colorOption == (int)colorOptions.Red) //zmienić na switch
+                    switch(colorOption)
                     {
-                        ColoredPixelR = pixel.R;
-                        ColoredPixelG = pixel.G - 255;
-                        ColoredPixelB = pixel.B - 255;
+                        case (int)colors.Red:
+                            {
+                                ColoredPixelR = pixel.R;
+                                ColoredPixelG = pixel.G - maxRGBValue;
+                                ColoredPixelB = pixel.B - maxRGBValue;
+
+                                break;
+                            }
+                        case (int)colors.Green:
+                            {
+                                ColoredPixelR = pixel.R - maxRGBValue;
+                                ColoredPixelG = pixel.G;
+                                ColoredPixelB = pixel.B - maxRGBValue;
+
+                                break;
+                            }
+                        case (int)colors.Blue:
+                            {
+                                ColoredPixelR = pixel.R - maxRGBValue;
+                                ColoredPixelG = pixel.G - maxRGBValue;
+                                ColoredPixelB = pixel.B;
+
+                                break;
+                            }                     
                     }
-                    if (colorOption == (int)colorOptions.Green) //zmienić na switch
-                    {
-                        ColoredPixelR = pixel.R - 255;
-                        ColoredPixelG = pixel.G;
-                        ColoredPixelB = pixel.B - 255;
-                    }
-                    if (colorOption == (int)colorOptions.Blue) //zmienić na switch
-                    {
-                        ColoredPixelR = pixel.R - 255;
-                        ColoredPixelG = pixel.G - 255;
-                        ColoredPixelB = pixel.B;
-                    }
+                    
+                    ColoredPixelR = Math.Max(ColoredPixelR, minRGBValue);
+                    ColoredPixelR = Math.Min(maxRGBValue, ColoredPixelR);
 
-                    ColoredPixelR = Math.Max(ColoredPixelR, 0);
-                    ColoredPixelR = Math.Min(255, ColoredPixelR);
+                    ColoredPixelG = Math.Max(ColoredPixelG, minRGBValue);
+                    ColoredPixelG = Math.Min(maxRGBValue, ColoredPixelG);
 
-                    ColoredPixelG = Math.Max(ColoredPixelG, 0);
-                    ColoredPixelG = Math.Min(255, ColoredPixelG);
+                    ColoredPixelB = Math.Max(ColoredPixelB, minRGBValue);
+                    ColoredPixelB = Math.Min(maxRGBValue, ColoredPixelB);
 
-                    ColoredPixelB = Math.Max(ColoredPixelB, 0);
-                    ColoredPixelB = Math.Min(255, ColoredPixelB);
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)ColoredPixelR, (int)ColoredPixelG, (int)ColoredPixelB));
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(ColoredPixelR, ColoredPixelG, ColoredPixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
@@ -216,6 +238,7 @@ namespace ImageEditor
         private int[,] GaussFilterArray;
         private int filterWeightsSum;
         private int offset;
+        private const int bitsInByte = 8;
         private int threadsCount;
 
         public GaussianBlurEffect()
@@ -239,20 +262,20 @@ namespace ImageEditor
         {
             var rectangle = new Rectangle(0, 0, imageToEdit.Width, imageToEdit.Height);
             var data = imageToEdit.LockBits(rectangle, System.Drawing.Imaging.ImageLockMode.ReadWrite, imageToEdit.PixelFormat);
-            var depth = Bitmap.GetPixelFormatSize(data.PixelFormat) / 8;
+            var depth = Bitmap.GetPixelFormatSize(data.PixelFormat) / bitsInByte;
 
             var buffer = new byte[data.Width * data.Height * depth];
 
             System.Runtime.InteropServices.Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
              
             this.threadsCount = 2;
-            Thread imageConverterThread1 = new Thread(() => processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height / threadsCount, imageToEdit.Width, depth));
-            Thread imageConverterThread2 = new Thread(() => processImage(buffer, offset, imageToEdit.Height / threadsCount, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth));
+            Thread GaussianBlurThread1 = new Thread(() => processImage(buffer, offset, offset, imageToEdit.Width - offset, imageToEdit.Height / threadsCount, imageToEdit.Width, depth));
+            Thread GaussianBlurThread2 = new Thread(() => processImage(buffer, offset, imageToEdit.Height / threadsCount, imageToEdit.Width - offset, imageToEdit.Height - offset, imageToEdit.Width, depth));
 
-            imageConverterThread1.Start();
-            imageConverterThread2.Start();
-            imageConverterThread1.Join();
-            imageConverterThread2.Join();
+            GaussianBlurThread1.Start();
+            GaussianBlurThread2.Start();
+            GaussianBlurThread1.Join();
+            GaussianBlurThread2.Join();
 
             System.Runtime.InteropServices.Marshal.Copy(buffer, 0, data.Scan0, buffer.Length);
             imageToEdit.UnlockBits(data);
@@ -309,53 +332,114 @@ namespace ImageEditor
         
     }
 
-    class GammaFilteringEffect : IEditImage
+    class GammaCorrectionEffect : IEditImage 
     {
-        private static int gammaValue; //oddzielna wartość dla każdego kanału RGB??
-        public static void setGammaValue(int value)
+        private static double gammaValue; 
+        public static void setGammaValue(double value)
         {
             gammaValue = value;
         }
+
+        private List<int> pixelsAfterGammaCorrection;
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         public void editImage(Bitmap imageToEdit)
         {
-            List<int> gammaArray = createGammaArray(); //oddzielne tablice dla każdego kanału??
-
+            makeGammaPixelsList();
+            
             Color pixel;
 
             for(int i = 0; i < imageToEdit.Width; ++i)
                 for(int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
-                    //int pixelR = gammaArray[(int)2];
-
-                   imageToEdit.SetPixel(i, j, Color.FromArgb(gammaArray[(int)pixel.R], gammaArray[(int)pixel.G], gammaArray[(int)pixel.B]));
+                    
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(pixelsAfterGammaCorrection[pixel.R], pixelsAfterGammaCorrection[pixel.G], pixelsAfterGammaCorrection[pixel.B]));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
 
         }
 
-        private List<int> createGammaArray()
+        private void makeGammaPixelsList()
         {
-            List<int> gammaArray = new List<int>();
+            this.pixelsAfterGammaCorrection = new List<int>();
+
+            double pixelAfterGammaCorrection = 0;
 
             for(int i = 0; i < 256; ++i)
             {
-                gammaArray.Add((int)Math.Min(255, (int)255.0 * Math.Pow(i / 255.0, 1.0 / gammaValue) + 0.5)); //rzutowanie??
-            }
+                pixelAfterGammaCorrection = maxRGBValue * Math.Pow(i / (double)maxRGBValue, 1.0 / gammaValue);
+                pixelAfterGammaCorrection = Math.Max(pixelAfterGammaCorrection, minRGBValue);
+                pixelAfterGammaCorrection = Math.Min(maxRGBValue, pixelAfterGammaCorrection);
 
-            return gammaArray;
+                pixelsAfterGammaCorrection.Add((int)pixelAfterGammaCorrection);
+            }           
         }
     }
 
+    class ChangeExposureEffect : IEditImage
+    {
+        private const int maxRGBValue = 255;
+        private static double exposureCorrectnessRatio;
+        
+        public static void setExposureCorrectnessRatio(double value)
+        {
+            exposureCorrectnessRatio = value;
+        }
+
+        private List<int> LUT;
+        public void editImage(Bitmap imageToEdit)
+        {
+            makeLUTArray();
+
+            Color pixel;
+            
+            for(int i = 0; i < imageToEdit.Width; ++i)
+                for(int j = 0; j < imageToEdit.Height; ++j)
+                {
+                    pixel = imageToEdit.GetPixel(i, j);
+                    
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(LUT[pixel.R], LUT[pixel.G], LUT[pixel.B]));
+                }
+
+            UsersImage.saveEditedImage(imageToEdit);
+            
+        }
+
+        private void makeLUTArray()
+        {
+            this.LUT = new List<int>();
+
+            double newPixelValue = 0;
+
+            for(int i = 0; i < 256; ++i)
+            {
+                newPixelValue = exposureCorrectnessRatio * i;
+
+                if (newPixelValue < maxRGBValue)
+                {
+                    LUT.Add((int)newPixelValue);
+                }
+                else
+                {
+                    LUT.Add(maxRGBValue);
+                }
+            }
+
+        }
+    }
     class ChangeContrastEffect : IEditImage
     {
         private List<double> LUT;
-        private static int contrastValue;
-        public static void setContrastValue(int contrast)
+        private static double contrastValue;
+        public static void setContrastValue(double contrast)
         {
             contrastValue = contrast;
         }
+
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
 
         public void editImage(Bitmap imageToEdit)
         {
@@ -376,23 +460,20 @@ namespace ImageEditor
 
         private void makeLUTArray()
         {
-            double contrastCorrectionFactor = (259 * (contrastValue + 255)) / (255 * (259 - contrastValue));
-
             this.LUT = new List<double>();
 
             double newContrastedPixel = 0;
 
             for(int i = 0; i < 256; ++i)
             {
-                newContrastedPixel = contrastCorrectionFactor * ((i - 128) + 128);
+                newContrastedPixel = contrastValue * ((i - maxRGBValue / 2) + maxRGBValue / 2);
 
-                if (newContrastedPixel > 255) //lambda??
-                    newContrastedPixel = 255;
-                else if (newContrastedPixel < 0)
-                    newContrastedPixel = 0;
+                if (newContrastedPixel > maxRGBValue) 
+                    newContrastedPixel = maxRGBValue;
+                else if (newContrastedPixel < minRGBValue)
+                    newContrastedPixel = minRGBValue;
 
-                LUT.Add(newContrastedPixel);
-                
+                LUT.Add(newContrastedPixel);                
             }
         }
     }
@@ -404,6 +485,7 @@ namespace ImageEditor
         private List<double> LUT_B;
 
         private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         
         public void editImage(Bitmap imageToEdit)
         {
@@ -468,12 +550,12 @@ namespace ImageEditor
 
             for(int i = 0; i < 256; ++i)
             {
-                newStretchedPixel = (maxRGBValue / (maxComponentValue - minComponentValue)) * (i - minComponentValue);
+                newStretchedPixel = ((double)maxRGBValue / ((double)(maxComponentValue - minComponentValue))) * (i - minComponentValue);
 
-                if (newStretchedPixel > 255)
-                    newStretchedPixel = 255;
-                if (newStretchedPixel < 0)
-                    newStretchedPixel = 0;
+                if (newStretchedPixel > maxRGBValue)
+                    newStretchedPixel = maxRGBValue;
+                if (newStretchedPixel < minRGBValue)
+                    newStretchedPixel = minRGBValue;
 
                 LUTArray.Add(newStretchedPixel);
             }

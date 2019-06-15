@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="selectingEffect" Height="459" Width="1143" Icon="./resources/image.ico" WindowStartupLocation="CenterScreen">
+        Title="selectingEffect" Height="459" Width="1003" Icon="./resources/image.ico" WindowStartupLocation="CenterScreen">
     <Grid Margin="29,22,28,9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140*"/>
@@ -15,12 +15,12 @@
         <Label Content="Selected image" HorizontalAlignment="Left" Height="45" Margin="0,360,0,-17" VerticalAlignment="Top" Width="99"/>
         <Button Content="Black-White" HorizontalAlignment="Left" Height="50" Margin="535,-5,0,0" VerticalAlignment="Top" Width="157" Click="blackWhite_click"/>
         <Button Content="Sepia" HorizontalAlignment="Left" Height="50" Margin="535,65,0,0" VerticalAlignment="Top" Width="157" Click="sepia_Click"/>
-        <Button Content="Negative" HorizontalAlignment="Left" Height="50" Margin="535,135,0,0" VerticalAlignment="Top" Width="157" Click="Negative_Click"/>
+        <Button Content="Invert Colors" HorizontalAlignment="Left" Height="50" Margin="535,135,0,0" VerticalAlignment="Top" Width="157" Click="InvertColors_Click"/>
         <Button Content="Brightness" HorizontalAlignment="Left" Height="50" Margin="535,205,0,0" VerticalAlignment="Top" Width="157" Click="Brightness_Click"/>
         <Button Content="Color" HorizontalAlignment="Left" Height="50" Margin="535,280,0,0" VerticalAlignment="Top" Width="157" Click="Color_Click"/>
         <Button Content="Gaussian Blur" HorizontalAlignment="Left" Height="50" Margin="723,65,0,0" VerticalAlignment="Top" Width="157" Click="GaussianBlur_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Gamma Filtering" HorizontalAlignment="Left" Height="50" Margin="723,135,0,0" VerticalAlignment="Top" Width="157" Click="GammaFiltering_Click" Grid.ColumnSpan="2"/>
-        <Button Content="Crop Image" HorizontalAlignment="Left" Height="50" Margin="723,205,0,0" VerticalAlignment="Top" Width="157" Click="CropImage_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Gamma Correction" HorizontalAlignment="Left" Height="50" Margin="723,135,0,0" VerticalAlignment="Top" Width="157" Click="GammaCorrection_Click" Grid.ColumnSpan="2"/>
+        <Button Content="Change Exposure" HorizontalAlignment="Left" Height="50" Margin="723,205,0,0" VerticalAlignment="Top" Width="157" Click="ChangeExposure_Click" Grid.ColumnSpan="2"/>
         <Button Content="Contrast" HorizontalAlignment="Left" Height="50" Margin="723,280,0,0" VerticalAlignment="Top" Width="157" Click="Contrast_Click" Grid.ColumnSpan="2" RenderTransformOrigin="0.688,0.5"/>
         <Button Content="Histogram Stretching" HorizontalAlignment="Left" Height="50" Margin="723,-5,0,0" VerticalAlignment="Top" Width="157" Click="HistogramStretching_Click" Grid.ColumnSpan="2"/>
 
