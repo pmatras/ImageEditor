@@ -8,7 +8,8 @@ namespace ImageEditor
     class UsersImage
     {
         private static string imagePath;
-        private static string editedImagePath; 
+        private static string editedImagePath;
+        private static bool editedImageSaved = true;
         
         public static string getImagePath()
         {
@@ -28,6 +29,11 @@ namespace ImageEditor
         {
             editedImagePath = ImagePath;
         }
+
+        public static bool getEditedImageSave()
+        {
+            return editedImageSaved;
+        } 
 
         Bitmap image;
         public Bitmap loadImage() 
@@ -87,7 +93,12 @@ namespace ImageEditor
                 editedImagePath = saveFileDialog.FileName;
                 toSave.Save(editedImagePath);
 
+                editedImageSaved = true;
+
                 MessageBox.Show("File saved succesfully in " + editedImagePath, "File saved");
+            } else
+            {
+                editedImageSaved = false;
             }
                        
         }

@@ -19,12 +19,15 @@ namespace ImageEditor
 
                 OriginalImage.Source = originalImage;
 
-                BitmapImage editedImage = new BitmapImage();
-                editedImage.BeginInit();
-                editedImage.UriSource = new Uri(UsersImage.getEditedImagePath(), UriKind.Absolute);
-                editedImage.EndInit();
-                
-                EditedImage.Source = editedImage;
+                if (UsersImage.getEditedImageSave())
+                {
+                    BitmapImage editedImage = new BitmapImage();
+                    editedImage.BeginInit();
+                    editedImage.UriSource = new Uri(UsersImage.getEditedImagePath(), UriKind.Absolute);
+                    editedImage.EndInit();
+
+                    EditedImage.Source = editedImage;
+                }
             }
             catch(Exception exception)
             {
