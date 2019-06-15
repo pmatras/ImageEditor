@@ -332,42 +332,49 @@ namespace ImageEditor
         
     }
 
-    class GammaFilteringEffect : IEditImage //przejrzec tworzenie LUT
+    class GammaCorrectionEffect : IEditImage 
     {
-        private static double gammaValue; //oddzielna wartość dla każdego kanału RGB??
+        private static double gammaValue; 
         public static void setGammaValue(double value)
         {
             gammaValue = value;
         }
+
+        private List<int> pixelsAfterGammaCorrection;
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         public void editImage(Bitmap imageToEdit)
         {
-            List<int> gammaArray = createGammaArray(); //oddzielne tablice dla każdego kanału??
-
+            makeGammaPixelsList();
+            
             Color pixel;
 
             for(int i = 0; i < imageToEdit.Width; ++i)
                 for(int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
-                    //int pixelR = gammaArray[(int)2];
-
-                   imageToEdit.SetPixel(i, j, Color.FromArgb(gammaArray[(int)pixel.R], gammaArray[(int)pixel.G], gammaArray[(int)pixel.B]));
+                    
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(pixelsAfterGammaCorrection[pixel.R], pixelsAfterGammaCorrection[pixel.G], pixelsAfterGammaCorrection[pixel.B]));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
 
         }
 
-        private List<int> createGammaArray()
+        private void makeGammaPixelsList()
         {
-            List<int> gammaArray = new List<int>();
+            this.pixelsAfterGammaCorrection = new List<int>();
+
+            double pixelAfterGammaCorrection = 0;
 
             for(int i = 0; i < 256; ++i)
             {
-                gammaArray.Add((int)Math.Min(255, (int)255.0 * Math.Pow(i / 255.0, 1.0 / gammaValue) + 0.5)); //rzutowanie??
-            }
+                pixelAfterGammaCorrection = maxRGBValue * Math.Pow(i / maxRGBValue, 1.0 / gammaValue);
+                pixelAfterGammaCorrection = Math.Max(pixelAfterGammaCorrection, minRGBValue);
+                pixelAfterGammaCorrection = Math.Min(maxRGBValue, pixelAfterGammaCorrection);
 
-            return gammaArray;
+                pixelsAfterGammaCorrection.Add((int)pixelAfterGammaCorrection);
+            }           
         }
     }
 
