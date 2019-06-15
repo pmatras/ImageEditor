@@ -132,9 +132,10 @@ namespace ImageEditor
             {
 
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter color to edit image (red, green or blue)", "Enter color", "red", -1, -1);
+                input = input.ToLower();
 
                 correctInput = true;
-
+                
                 switch (input)
                 {
                     case "red":
