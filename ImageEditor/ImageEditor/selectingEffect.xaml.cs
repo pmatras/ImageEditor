@@ -238,7 +238,7 @@ namespace ImageEditor
 
             do
             {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of Exposure Value between -10 and 10", "Enter value", "2", -1, -1);
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of Exposure Value between -8 and 8", "Enter value", "2", -1, -1);
 
                 try
                 {
@@ -255,9 +255,9 @@ namespace ImageEditor
 
                 if (correctInput == true)
                 {
-                    if (exposureValue < -10 || exposureValue > 10)
+                    if (exposureValue < -8 || exposureValue > 8)
                     {
-                        MessageBox.Show("Entered value isn't in range between -10 and 10. Please try again!", "Wrong value!");
+                        MessageBox.Show("Entered value isn't in range between -8 and 8. Please try again!", "Wrong value!");
                         correctInput = false;
                     }
                 }
