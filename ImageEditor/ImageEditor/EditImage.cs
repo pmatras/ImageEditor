@@ -80,40 +80,34 @@ namespace ImageEditor
 
     class SepiaEffect : IEditImage
     {
-        private const int maxRGBValue = 255;
-        private const int fillFactor = 20;
+        private const int maxRGBValue = 255;        
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
 
-            for (int i = 0; i < imageToEdit.Width; ++i)
-                for (int j = 0; j < imageToEdit.Height; ++j)
-                {
-                    pixel = imageToEdit.GetPixel(i, j);
-
-                    var NegativePixelR = maxRGBValue - pixel.R;
-                    var NegativePixelG = maxRGBValue - pixel.G;
-                    var NegativePixelB = maxRGBValue - pixel.B;
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)NegativePixelR, (int)NegativePixelG, (int)NegativePixelB));
-                }
+            int SepiaPixelR = 0;
+            int SepiaPixelG = 0;
+            int SepiaPixelB = 0;
 
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
 
-                    var SepiaPixelR = pixel.R + 2 * fillFactor; //można przygotować gotową tablicę z wartościami pixeli
-                    if (SepiaPixelR > 255)
-                        SepiaPixelR = 255;
+                    SepiaPixelR = (int)(0.393 * pixel.R + 0.769 * pixel.G + 0.189 * pixel.B);
+                    SepiaPixelG = (int)(0.349 * pixel.R + 0.686 * pixel.G + 0.168 * pixel.B);
+                    SepiaPixelB = (int)(0.272 * pixel.R + 0.534 * pixel.G + 0.131 * pixel.B);
 
-                    var SepiaPixelG = pixel.G + fillFactor;
-                    if (SepiaPixelG > 255)
-                        SepiaPixelG = 255;
+                    if (SepiaPixelR > maxRGBValue)
+                        SepiaPixelR = maxRGBValue;
 
-                    var SepiaPixelB = pixel.B;
+                    if (SepiaPixelG > maxRGBValue)
+                        SepiaPixelG = maxRGBValue;
 
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)SepiaPixelR, (int)SepiaPixelG, (int)SepiaPixelB));
+                    if (SepiaPixelB > maxRGBValue)
+                        SepiaPixelB = maxRGBValue;
+
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(SepiaPixelR, SepiaPixelG, SepiaPixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
