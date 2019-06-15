@@ -17,12 +17,13 @@ namespace ImageEditor
                 originalImage.UriSource = new Uri(UsersImage.getImagePath(), UriKind.Absolute);
                 originalImage.EndInit();
 
+                OriginalImage.Source = originalImage;
+
                 BitmapImage editedImage = new BitmapImage();
                 editedImage.BeginInit();
                 editedImage.UriSource = new Uri(UsersImage.getEditedImagePath(), UriKind.Absolute);
                 editedImage.EndInit();
-
-                OriginalImage.Source = originalImage;
+                
                 EditedImage.Source = editedImage;
             }
             catch(Exception exception)
