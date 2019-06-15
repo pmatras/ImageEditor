@@ -284,15 +284,16 @@ namespace ImageEditor
             IEditImage imageEditor = new ChangeContrastEffect();
 
             bool correctInput = false;
-            int contrastValue = 0;
+            double contrastValue = 0;
 
             do
             {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -255 and 255.", "Enter value of contrast adjustment", "50", -1, -1);
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of contrast to adjust between -100 and 100.", "Enter value of contrast adjustment", "50", -1, -1);
+                input = input.Replace(".", ",");
 
                 try
                 {
-                    contrastValue = Int32.Parse(input);
+                    contrastValue = Double.Parse(input);
 
                     correctInput = true;
                 }
@@ -305,9 +306,9 @@ namespace ImageEditor
 
                 if (correctInput == true)
                 {
-                    if (contrastValue < -255 || contrastValue > 255)
+                    if (contrastValue < -100 || contrastValue > 100)
                     {
-                        MessageBox.Show("Entered value isn't in range between -255 and 255. Please try again!", "Wrong value!");
+                        MessageBox.Show("Entered value isn't in range between -100 and 100. Please try again!", "Wrong value!");
                         correctInput = false;
                     }
                 }
@@ -332,10 +333,7 @@ namespace ImageEditor
             imageEditor.editImage(imageToEdit);
 
             EffectSelector.showEditionResults();
-
-
             this.Close();
-
         }
     }
 

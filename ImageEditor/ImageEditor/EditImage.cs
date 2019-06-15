@@ -432,11 +432,14 @@ namespace ImageEditor
     class ChangeContrastEffect : IEditImage
     {
         private List<double> LUT;
-        private static int contrastValue;
-        public static void setContrastValue(int contrast)
+        private static double contrastValue;
+        public static void setContrastValue(double contrast)
         {
             contrastValue = contrast;
         }
+
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
 
         public void editImage(Bitmap imageToEdit)
         {
@@ -457,23 +460,20 @@ namespace ImageEditor
 
         private void makeLUTArray()
         {
-            double contrastCorrectionFactor = (259 * (contrastValue + 255)) / (255 * (259 - contrastValue));
-
             this.LUT = new List<double>();
 
             double newContrastedPixel = 0;
 
             for(int i = 0; i < 256; ++i)
             {
-                newContrastedPixel = contrastCorrectionFactor * ((i - 128) + 128);
+                newContrastedPixel = contrastValue * ((i - maxRGBValue / 2) + maxRGBValue / 2);
 
-                if (newContrastedPixel > 255) //lambda??
-                    newContrastedPixel = 255;
-                else if (newContrastedPixel < 0)
-                    newContrastedPixel = 0;
+                if (newContrastedPixel > maxRGBValue) 
+                    newContrastedPixel = maxRGBValue;
+                else if (newContrastedPixel < minRGBValue)
+                    newContrastedPixel = minRGBValue;
 
-                LUT.Add(newContrastedPixel);
-                
+                LUT.Add(newContrastedPixel);                
             }
         }
     }
