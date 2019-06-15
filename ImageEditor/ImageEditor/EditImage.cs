@@ -122,41 +122,47 @@ namespace ImageEditor
         {
             brightnessValue = usersBrightnessValue;
         }
-        
+
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
+        private List<int> brightenPixels;
+                
         public void editImage(Bitmap imageToEdit)
         {
+            makeBrightenPixelsList();
+
             Color pixel;
 
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
-
-                    var BrightPixelR = pixel.R + brightnessValue;
-                    var BrightPixelG = pixel.G + brightnessValue;
-                    var BrightPixelB = pixel.B + brightnessValue;
-
-                    if (BrightPixelR < 0)
-                        BrightPixelR = 0;
-                    if (BrightPixelR > 255)
-                        BrightPixelR = 255;
-
-                    if (BrightPixelG < 0)
-                        BrightPixelG = 0;
-                    if (BrightPixelG > 255)
-                        BrightPixelG = 255;
-
-                    if (BrightPixelB < 0)
-                        BrightPixelB = 0;
-                    if (BrightPixelB > 255)
-                        BrightPixelB = 255;
-                                        
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)BrightPixelR, (int)BrightPixelG, (int)BrightPixelB));
+                                     
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(brightenPixels[pixel.R], brightenPixels[pixel.G], brightenPixels[pixel.B]));
                 }
             UsersImage.saveEditedImage(imageToEdit);
         }
 
-        
+        private void makeBrightenPixelsList()
+        {
+            this.brightenPixels = new List<int>();
+            
+            int brightenPixel = 0;
+
+            for(int i = 0; i < 256; ++i)
+            {
+                brightenPixel = i + brightnessValue;
+
+                if (brightenPixel > maxRGBValue)
+                    brightenPixel = maxRGBValue;
+
+                if (brightenPixel < minRGBValue)
+                    brightenPixel = minRGBValue;
+
+                brightenPixels.Add(brightenPixel);
+
+            }
+        }        
         }
 
     class ColorEffect : IEditImage
@@ -171,6 +177,7 @@ namespace ImageEditor
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
+                     
 
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
