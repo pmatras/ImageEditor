@@ -166,19 +166,19 @@ namespace ImageEditor
         }
 
     class ColorEffect : IEditImage
-    {
-        public enum colorOptions { Red, Green, Blue }; //to w sumie to metody z obsluga zdarzenia
+    {        
         private static int colorOption;
         public static void setColorOption(int _colorOption)
         {
             colorOption = _colorOption;
         }
 
+        private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         public void editImage(Bitmap imageToEdit)
         {
             Color pixel;
                      
-
             for (int i = 0; i < imageToEdit.Width; ++i)
                 for (int j = 0; j < imageToEdit.Height; ++j)
                 {
@@ -188,35 +188,44 @@ namespace ImageEditor
                     int ColoredPixelG = 0;
                     int ColoredPixelB = 0;
 
-                    if (colorOption == (int)colorOptions.Red) //zmienić na switch
+                    switch(colorOption)
                     {
-                        ColoredPixelR = pixel.R;
-                        ColoredPixelG = pixel.G - 255;
-                        ColoredPixelB = pixel.B - 255;
+                        case (int)colors.Red:
+                            {
+                                ColoredPixelR = pixel.R;
+                                ColoredPixelG = pixel.G - maxRGBValue;
+                                ColoredPixelB = pixel.B - maxRGBValue;
+
+                                break;
+                            }
+                        case (int)colors.Green:
+                            {
+                                ColoredPixelR = pixel.R - maxRGBValue;
+                                ColoredPixelG = pixel.G;
+                                ColoredPixelB = pixel.B - maxRGBValue;
+
+                                break;
+                            }
+                        case (int)colors.Blue:
+                            {
+                                ColoredPixelR = pixel.R - maxRGBValue;
+                                ColoredPixelG = pixel.G - maxRGBValue;
+                                ColoredPixelB = pixel.B;
+
+                                break;
+                            }                     
                     }
-                    if (colorOption == (int)colorOptions.Green) //zmienić na switch
-                    {
-                        ColoredPixelR = pixel.R - 255;
-                        ColoredPixelG = pixel.G;
-                        ColoredPixelB = pixel.B - 255;
-                    }
-                    if (colorOption == (int)colorOptions.Blue) //zmienić na switch
-                    {
-                        ColoredPixelR = pixel.R - 255;
-                        ColoredPixelG = pixel.G - 255;
-                        ColoredPixelB = pixel.B;
-                    }
+                    
+                    ColoredPixelR = Math.Max(ColoredPixelR, minRGBValue);
+                    ColoredPixelR = Math.Min(maxRGBValue, ColoredPixelR);
 
-                    ColoredPixelR = Math.Max(ColoredPixelR, 0);
-                    ColoredPixelR = Math.Min(255, ColoredPixelR);
+                    ColoredPixelG = Math.Max(ColoredPixelG, minRGBValue);
+                    ColoredPixelG = Math.Min(maxRGBValue, ColoredPixelG);
 
-                    ColoredPixelG = Math.Max(ColoredPixelG, 0);
-                    ColoredPixelG = Math.Min(255, ColoredPixelG);
+                    ColoredPixelB = Math.Max(ColoredPixelB, minRGBValue);
+                    ColoredPixelB = Math.Min(maxRGBValue, ColoredPixelB);
 
-                    ColoredPixelB = Math.Max(ColoredPixelB, 0);
-                    ColoredPixelB = Math.Min(255, ColoredPixelB);
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb((int)ColoredPixelR, (int)ColoredPixelG, (int)ColoredPixelB));
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(ColoredPixelR, ColoredPixelG, ColoredPixelB));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
