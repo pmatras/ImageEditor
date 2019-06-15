@@ -369,7 +369,7 @@ namespace ImageEditor
 
             for(int i = 0; i < 256; ++i)
             {
-                pixelAfterGammaCorrection = maxRGBValue * Math.Pow(i / maxRGBValue, 1.0 / gammaValue);
+                pixelAfterGammaCorrection = maxRGBValue * Math.Pow(i / (double)maxRGBValue, 1.0 / gammaValue);
                 pixelAfterGammaCorrection = Math.Max(pixelAfterGammaCorrection, minRGBValue);
                 pixelAfterGammaCorrection = Math.Min(maxRGBValue, pixelAfterGammaCorrection);
 
