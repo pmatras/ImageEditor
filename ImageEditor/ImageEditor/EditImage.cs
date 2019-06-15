@@ -485,6 +485,7 @@ namespace ImageEditor
         private List<double> LUT_B;
 
         private const int maxRGBValue = 255;
+        private const int minRGBValue = 0;
         
         public void editImage(Bitmap imageToEdit)
         {
@@ -549,12 +550,12 @@ namespace ImageEditor
 
             for(int i = 0; i < 256; ++i)
             {
-                newStretchedPixel = (maxRGBValue / (maxComponentValue - minComponentValue)) * (i - minComponentValue);
+                newStretchedPixel = ((double)maxRGBValue / ((double)(maxComponentValue - minComponentValue))) * (i - minComponentValue);
 
-                if (newStretchedPixel > 255)
-                    newStretchedPixel = 255;
-                if (newStretchedPixel < 0)
-                    newStretchedPixel = 0;
+                if (newStretchedPixel > maxRGBValue)
+                    newStretchedPixel = maxRGBValue;
+                if (newStretchedPixel < minRGBValue)
+                    newStretchedPixel = minRGBValue;
 
                 LUTArray.Add(newStretchedPixel);
             }
