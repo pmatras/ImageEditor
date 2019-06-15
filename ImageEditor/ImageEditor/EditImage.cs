@@ -394,20 +394,13 @@ namespace ImageEditor
             makeLUTArray();
 
             Color pixel;
-            int newRValue = 0;
-            int newGValue = 0;
-            int newBValue = 0;
-
+            
             for(int i = 0; i < imageToEdit.Width; ++i)
                 for(int j = 0; j < imageToEdit.Height; ++j)
                 {
                     pixel = imageToEdit.GetPixel(i, j);
-
-                    newRValue = LUT[pixel.R];
-                    newGValue = LUT[pixel.G];
-                    newBValue = LUT[pixel.B];
-
-                    imageToEdit.SetPixel(i, j, Color.FromArgb(newRValue, newGValue, newBValue));
+                    
+                    imageToEdit.SetPixel(i, j, Color.FromArgb(LUT[pixel.R], LUT[pixel.G], LUT[pixel.B]));
                 }
 
             UsersImage.saveEditedImage(imageToEdit);
