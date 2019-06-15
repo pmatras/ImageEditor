@@ -241,6 +241,7 @@ namespace ImageEditor
             do
             {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter value of Exposure Value between -8 and 8", "Enter value", "2", -1, -1);
+                input = input.Replace(".", ",");
 
                 try
                 {
