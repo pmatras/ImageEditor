@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
 using Microsoft.Win32;
@@ -12,7 +8,7 @@ namespace ImageEditor
     class UsersImage
     {
         private static string imagePath;
-        private static string editedImagePath; //kolekcje do przertrzymywania w mapie wartosci pixeli dla danego efektu; edytowane bitmapy zapisywac w folderze edited
+        private static string editedImagePath; 
         
         public static string getImagePath()
         {
@@ -35,32 +31,54 @@ namespace ImageEditor
 
         Bitmap image;
         public Bitmap loadImage() 
-        {
-            
-
+        {    
             try
             {
                 image = new Bitmap(imagePath, true);
                 
-            } catch(ArgumentException)
+            }
+            catch (Exception exception)
             {
-                MessageBox.Show("Error occured!");
+                MessageBox.Show("Error occured: " + exception.Message);
             }
 
             return image;
         }
 
-        public static Bitmap makeCopyToEdit(Bitmap imageToCopy)
+        public Bitmap makeCopyToEdit(Bitmap imageToCopy)
         {
             Bitmap clonedImage = new Bitmap(imageToCopy);
 
             return clonedImage;
         }
 
+        public static bool openImageToEdit()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;...";
+            openFileDialog.Title = "Open Image to Edit";
+            openFileDialog.ShowDialog();
+
+            if (openFileDialog.FileName != "")
+            {
+                string imageToEditPath = openFileDialog.FileName;
+
+                imagePath = imageToEditPath;
+
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Image isn't selected. Please try again!", "Error occured!");
+
+                return false;
+            }
+        }
+
         public static void saveEditedImage(Bitmap toSave)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog(); //exceptions
-            saveFileDialog.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp"; //"Image Files|*.jpg;*.jpeg;*.png;..."
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JPG Image|*.jpg|JPEG Image|*.jpeg|Bitmap Image|*.bmp|PNG Image|*.png";
             saveFileDialog.Title = "Save Edited Image";
             saveFileDialog.ShowDialog();  
             
@@ -69,9 +87,9 @@ namespace ImageEditor
                 editedImagePath = saveFileDialog.FileName;
                 toSave.Save(editedImagePath);
 
-                MessageBox.Show("File saved succesfully in " + editedImagePath);
+                MessageBox.Show("File saved succesfully in " + editedImagePath, "File saved");
             }
-            
+                       
         }
 
     }
