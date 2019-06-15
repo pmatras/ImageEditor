@@ -343,7 +343,7 @@ namespace ImageEditor
         {
             UsersImage image = new UsersImage(); 
             Bitmap usersImage = image.loadImage();
-            Bitmap imageToEdit = UsersImage.makeCopyToEdit(usersImage);
+            Bitmap imageToEdit = image.makeCopyToEdit(usersImage);
 
             return imageToEdit;
         }

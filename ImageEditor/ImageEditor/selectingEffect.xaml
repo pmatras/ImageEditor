@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor"
         mc:Ignorable="d"
-        Title="selectingEffect" Height="459" Width="993" Icon="./resources/image.ico" WindowStartupLocation="CenterScreen">
+        Title="selectingEffect" Height="459" Width="1003" Icon="./resources/image.ico" WindowStartupLocation="CenterScreen">
     <Grid Margin="29,22,28,9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140*"/>
